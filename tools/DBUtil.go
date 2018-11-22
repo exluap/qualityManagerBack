@@ -4,7 +4,7 @@
  * twitter: https://twitter.com/exluap
  * keybase: https://keybase.io/exluap
  * website: https://exluap.com
-*/
+ */
 
 package tools
 
@@ -17,9 +17,9 @@ import (
 	"time"
 )
 
-func CheckIfUserExist(SIEBEL, PASS string) bool{
+func CheckIfUserExist(SIEBEL, PASS string) bool {
 
-	db,err := sql.Open("sqlite3", "./goqualityBD.db")
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
 
 	if err != nil {
 		log.Print(err)
@@ -29,7 +29,7 @@ func CheckIfUserExist(SIEBEL, PASS string) bool{
 
 	sqlstmt := `SELECT SIEBEL, PASS FROM users WHERE SIEBEL = ? AND PASS = ?`
 
-	err = db.QueryRow(sqlstmt, SIEBEL, PASS).Scan(&SIEBEL,&PASS)
+	err = db.QueryRow(sqlstmt, SIEBEL, PASS).Scan(&SIEBEL, &PASS)
 
 	if err != nil {
 		if err != sql.ErrNoRows {
@@ -42,10 +42,9 @@ func CheckIfUserExist(SIEBEL, PASS string) bool{
 	return true
 }
 
-
 func UserQueries(userId string) ([]byte, error) {
 
-	db,err := sql.Open("sqlite3", "./goqualityBD.db")
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
 
 	if err != nil {
 		log.Print(err)
@@ -91,12 +90,12 @@ func UserQueries(userId string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Println("user: " + userId + " response: " + string(jsonData))
+	//log.Println("user: " + userId + " response: " + string(jsonData))
 	return []byte(jsonData), nil
 }
 
-func AddQueryToDB(userId string, sr_number, sr_type, sr_result,sr_repeat_result, inform, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, need_other string) {
-	db,err := sql.Open("sqlite3", "./goqualityBD.db")
+func AddQueryToDB(userId, sr_number, sr_type, sr_result, sr_repeat_result, inform, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, need_other string) {
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
 
 	if err != nil {
 		log.Print(err)
@@ -107,27 +106,25 @@ func AddQueryToDB(userId string, sr_number, sr_type, sr_result,sr_repeat_result,
 	var sqlQuery string
 
 	if checkIfQueryExist(sr_number) {
-		sqlQuery = `UPDATE queries SET sr_type = ?, sr_result = ?, sr_repeat_result = ?, no_records = ?, no_records_only = ?, expenditure = ?, more_thing = ?, exp_claim = ?, fin_korr = ?, close_account = ?, unblock_needed = ?, loyatly_needed = ?, phone_denied = ?, due_date_action = ?, due_date_zero = ?, due_date_move = ?, inform = ?, need_other = ? WHERE sr_number = ?`
+		sqlQuery = `UPDATE queries SET sr_type = ?, sr_result = ?, sr_repeat_result = ?, no_records = ?, no_records_only = ?, expenditure = ?, more_thing = ?, exp_claim = ?, fin_korr = ?, close_account = ?, unblock_needed = ?, loyatly_needed = ?, phone_denied = ?, due_date_action = ?, due_date_zero = ?, due_date_move = ?, inform = ?, need_other = ?, note = "", additional_actions="", how_inform = "" WHERE sr_number = ?`
 		_, err = db.Exec(sqlQuery, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other, sr_number)
 	} else {
-		sqlQuery = `INSERT INTO queries (sr_number, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`
+		sqlQuery = `INSERT INTO queries (sr_number, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other, note, additional_actions, how_inform) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, "", "", "")`
 		_, err = db.Exec(sqlQuery, sr_number, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other)
 	}
 
 	//_, err = db.Exec(sqlQuery, sr_number, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform)
 
-
 	if err != nil {
 		log.Print(err)
 	}
-
 
 	var sr_type_rus string
 
 	switch sr_type {
 	case "ko_normal":
-		sr_type_rus = "Обычное КО"
-		break;
+		sr_type_rus = "Сотрудник СС / Бизнес"
+		break
 	case "ko_repeat":
 		sr_type_rus = "Рассмотрение КО"
 		break
@@ -149,15 +146,33 @@ func AddQueryToDB(userId string, sr_number, sr_type, sr_result,sr_repeat_result,
 		_, err = db.Exec(sqlQuery, timeCreate, userId, sr_number, sr_type_rus)
 	}
 
+	if err != nil {
+		log.Print(err)
+	}
+
+}
+
+func SaveNote(querydata map[string]string) {
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
 
 	if err != nil {
 		log.Print(err)
 	}
+
+	defer db.Close()
+
+	var sqlQuery string
+
+	sqlQuery = `INSERT INTO noteHelp (note, additional_actions, how_inform, sr_number) VALUES (?,?,?,?) `
+
+	//log.Println(querydata)
+
+	_, err = db.Exec(sqlQuery, querydata["note"], querydata["additional_actions"], querydata["how_inform"], querydata["sr_number"])
 }
 
-func checkIfQueryExist(sr_number string) bool{
+func checkIfQueryExist(sr_number string) bool {
 
-	db,err := sql.Open("sqlite3", "./goqualityBD.db")
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
 
 	if err != nil {
 		log.Print(err)
@@ -181,7 +196,7 @@ func checkIfQueryExist(sr_number string) bool{
 }
 
 func GetQueryInfo(sr_number string) ([]byte, error) {
-	db,err := sql.Open("sqlite3", "./goqualityBD.db")
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
 
 	if err != nil {
 		log.Print(err)
@@ -227,12 +242,12 @@ func GetQueryInfo(sr_number string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Println("sr_number: " + sr_number + " response: " + string(jsonData))
+	//log.Println("sr_number: " + sr_number + " response: " + string(jsonData))
 	return []byte(jsonData), nil
 }
 
-func AddNewUser(firstName, lastName, middleName, login string) (string, bool){
-	db,err := sql.Open("sqlite3", "./goqualityBD.db")
+func AddNewUser(firstName, lastName, middleName, login string) (string, bool) {
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
 
 	if err != nil {
 		log.Print(err)
@@ -244,16 +259,12 @@ func AddNewUser(firstName, lastName, middleName, login string) (string, bool){
 
 	pass = randStringRunes(8)
 
-
 	if checkIfExistRegister(login) {
 		return "", false
 	} else {
 		sqlQuery := `INSERT INTO users (SIEBEL, PASS, firstName, lastName, middleName) VALUES (?,?,?,?,?)`
 
-
-
 		_, err = db.Exec(sqlQuery, login, pass, firstName, lastName, middleName)
-
 
 		return pass, true
 	}
@@ -269,9 +280,9 @@ func randStringRunes(n int) string {
 	return string(b)
 }
 
-func checkIfExistRegister(SIEBEL string) bool{
+func checkIfExistRegister(SIEBEL string) bool {
 
-	db,err := sql.Open("sqlite3", "./goqualityBD.db")
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
 
 	if err != nil {
 		log.Print(err)
@@ -292,4 +303,62 @@ func checkIfExistRegister(SIEBEL string) bool{
 	}
 
 	return true
+}
+
+func DeleteQuery(sr_number, user string) bool {
+
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	defer db.Close()
+
+	querySQL := `DELETE FROM queries_list WHERE siebel_login = ? AND sr_number = ?`
+
+	_, err = db.Exec(querySQL, user, sr_number)
+
+	if err != nil {
+		log.Println(err)
+		return false
+	}
+
+	return true
+
+}
+
+func SaveLog(inter, logText, userName string) {
+
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	defer db.Close()
+
+	querySQL := `INSERT INTO logs (inter, logText, user, logTime) VALUES (?,?,?,?)`
+
+	timeCreate := time.Now().Format("02.01.2006 15:04")
+
+	_, err = db.Exec(querySQL, inter, logText, userName, timeCreate)
+
+}
+
+func GetPhrase(phrase_id string) string {
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	defer db.Close()
+
+	sqlQuery := "SELECT note_text FROM phrases WHERE note_id = ?"
+
+	err = db.QueryRow(sqlQuery, phrase_id).Scan(&phrase_id)
+
+	return phrase_id
+
 }
