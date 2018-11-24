@@ -14,6 +14,7 @@ pipeline {
     stage('build') {
       steps {
         sh 'cat /etc/passwd'
+        sh 'whoami'
       }
     }
   }
