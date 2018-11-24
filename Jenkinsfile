@@ -6,17 +6,16 @@ pipeline {
 
   }
   stages {
-    stage('ready to build') {
+    stage('set worspace') {
       steps {
-        sh 'go env'
+        sh 'export GOPATH=$WORKSPACE'
       }
     }
     stage('build') {
       steps {
-        sh 'ls $WORKSPACE'
-        sh '''export GOPATH=/var/lib/jenkins/jobs/qualityManagerBack/branches/master/workspace
+        sh '''go get ./...
 
-go get github.com/dgrijalva/jwt-go'''
+go build'''
       }
     }
   }
