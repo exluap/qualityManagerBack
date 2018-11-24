@@ -14,6 +14,7 @@ pipeline {
     stage('build') {
       steps {
         sh 'ls $WORKSPACE'
+        sh 'mkdir $WORKSPACE/test'
       }
     }
   }
