@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'resin/raspberrypi3-golang'
-      args '-v /tmp:/tmp'
+      args '-u'
     }
 
   }
