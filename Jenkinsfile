@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'resin/raspberrypi3-golang'
-      args '-u'
+      args ' -v /opt/passwd/passwd:/etc/passwd:ro -v /opt/passwd/group:/etc/group:ro -v /opt/passwd/shadow:/etc/shadow:ro'
     }
 
   }
