@@ -6,7 +6,7 @@
  * website: https://exluap.com
  */
 
-package tools
+package main
 
 import (
 	"database/sql"

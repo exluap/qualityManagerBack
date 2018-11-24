@@ -6,7 +6,7 @@
  * website: https://exluap.com
  */
 
-package tools
+package main
 
 const (
 	CLAIM_TITLE = "ОТВЕТ ПО ПРЕТЕНЗИИ: \n"
