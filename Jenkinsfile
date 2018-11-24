@@ -14,8 +14,7 @@ pipeline {
     }
     stage('build') {
       steps {
-        sh 'cat /etc/passwd'
-        sh 'go get ./...'
+        sh 'go install '
       }
     }
   }
