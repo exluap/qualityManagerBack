@@ -18,12 +18,20 @@ pipeline {
 go get github.com/rhysd/go-github-selfupdate/selfupdate
 go get github.com/rs/cors
 go get github.com/mattn/go-sqlite3'''
-        sh 'ls $WORKSPACE'
       }
     }
     stage('build') {
-      steps {
-        sh 'go build'
+      parallel {
+        stage('build') {
+          steps {
+            sh 'go build'
+          }
+        }
+        stage('') {
+          steps {
+            archiveArtifacts(artifacts: '*', excludes: '*.go, *.db', onlyIfSuccessful: true)
+          }
+        }
       }
     }
   }
