@@ -1,7 +1,7 @@
 pipeline {
   agent {
     docker {
-      image '\'mhlg/rpi-golang\''
+      image 'mhlg/rpi-golang'
     }
 
   }
