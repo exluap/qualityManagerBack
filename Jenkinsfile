@@ -18,6 +18,7 @@ pipeline {
 go get github.com/rhysd/go-github-selfupdate/selfupdate
 go get github.com/rs/cors
 go get github.com/mattn/go-sqlite3'''
+        sh 'ls $WORKSPACE'
       }
     }
     stage('build') {
