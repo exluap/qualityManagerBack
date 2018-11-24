@@ -12,9 +12,17 @@ pipeline {
         sh 'export GOPATH=$WORKSPACE'
       }
     }
+    stage('get depend') {
+      steps {
+        sh '''go get github.com/dgrijalva/jwt-go
+go get github.com/rhysd/go-github-selfupdate/selfupdate
+go get github.com/rs/cors
+go get github.com/mattn/go-sqlite3'''
+      }
+    }
     stage('build') {
       steps {
-        sh 'go install '
+        sh 'go build'
       }
     }
   }
