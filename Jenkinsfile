@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('ready to build') {
       steps {
-        sh 'sudo go get ./...'
+        sh 'go env'
       }
     }
     stage('build') {
