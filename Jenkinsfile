@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('ready to build') {
       steps {
-        sh 'go get ./...'
+        sh 'sudo go get ./...'
       }
     }
     stage('build') {
