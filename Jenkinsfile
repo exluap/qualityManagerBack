@@ -13,9 +13,7 @@ pipeline {
     }
     stage('build') {
       steps {
-        sh '''go get ./...
-
-go build'''
+        sh 'cat /etc/passwd'
       }
     }
   }
