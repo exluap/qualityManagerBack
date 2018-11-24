@@ -20,4 +20,8 @@ go get github.com/dgrijalva/jwt-go'''
       }
     }
   }
+  environment {
+    GIT_COMMITTER_NAME = 'exluapjenkins'
+    GIT_COMMITTER_EMAIL = 'nickzaytsew+jenkins@gmail.com'
+  }
 }
