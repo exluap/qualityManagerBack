@@ -52,7 +52,7 @@ func UserQueries(userId string) ([]byte, error) {
 
 	defer db.Close()
 
-	sqlString := `SELECT  time_create, sr_number, sr_type FROM queries_list WHERE siebel_login = ?`
+	sqlString := `SELECT  time_create, sr_number, sr_type FROM queries_list WHERE siebel_login = ? ORDER BY time_create DESC`
 
 	rows, err := db.Query(sqlString, userId)
 	if err != nil {

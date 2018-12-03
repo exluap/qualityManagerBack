@@ -43,7 +43,7 @@ type JWTData struct {
 	CustomClaims map[string]string `json:"custom,omitempty"`
 }
 
-const version = "1.3.4"
+const version = "1.3.5"
 
 func main() {
 	mode := flag.Bool("makeNewUser", false, "make new user")
