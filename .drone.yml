@@ -3,17 +3,11 @@ workspace:
   path: src/github.com/octocat/hello-world
 
 pipeline:
-  build:
-    image: golang:latest
-    commands:
-    - go get ./...
-    - GOOS="windows" GOARCH="386" go build -o targets/quality_server.exe
-    - go build -o targets/quality_server
   artifactory:
-      image: athieriot/drone-artifactory
-      url: https://prod.exluap.com/generic-local/
-      username: admin
-      password: $HEYDUDE
-      files:
-      - targets/*
-      force_upload: true
+    image: athieriot/drone-artifactory
+    url: https://prod.exluap.com/generic-local/
+    username: admin
+    password: $HEYDUDE
+    files:
+    - targets/*
+    force_upload: true
