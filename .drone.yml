@@ -13,3 +13,5 @@ pipeline:
     image: plugins/github-release
     api_key: repo
     files: targets/*
+    when:
+      event: tag
