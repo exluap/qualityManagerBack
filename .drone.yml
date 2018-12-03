@@ -13,7 +13,7 @@ pipeline:
       image: athieriot/drone-artifactory
       url: https://prod.exluap.com/generic-local/
       username: admin
-      password: heydude
+      password: $HEYDUDE
       files:
       - targets/*
       force_upload: true
