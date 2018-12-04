@@ -52,7 +52,7 @@ func UserQueries(userId string) ([]byte, error) {
 
 	defer db.Close()
 
-	sqlString := `SELECT  time_create, sr_number, sr_type FROM queries_list WHERE siebel_login = ? ORDER BY time_create DESC`
+	sqlString := `SELECT time_create, sr_number, sr_type FROM queries_list WHERE siebel_login = ? AND time_create between strftime('%d.%m.%Y %H:%M',date('now'), '+1 days') AND strftime('%d.%m.%Y %H:%M',datetime('now'), '+3 hours') ORDER BY time_create DESC`
 
 	rows, err := db.Query(sqlString, userId)
 	if err != nil {
@@ -136,14 +136,12 @@ func AddQueryToDB(userId, sr_number, sr_type, sr_result, sr_repeat_result, infor
 		break
 	}
 
-	timeCreate := time.Now().Format("02.01.2006 15:04")
-
 	if checkIfQueryExist(sr_number) {
 		sqlQuery = `UPDATE queries_list SET sr_type = ? WHERE sr_number = ?`
 		_, err = db.Exec(sqlQuery, sr_type_rus, sr_number)
 	} else {
-		sqlQuery = `INSERT INTO queries_list (time_create, siebel_login, sr_number, sr_type) VALUES (?,?,?,?)`
-		_, err = db.Exec(sqlQuery, timeCreate, userId, sr_number, sr_type_rus)
+		sqlQuery = `INSERT INTO queries_list (time_create, siebel_login, sr_number, sr_type) VALUES (strftime('%d.%m.%Y %H:%M',datetime('now'), '+3 hours'),?,?,?)`
+		_, err = db.Exec(sqlQuery, userId, sr_number, sr_type_rus)
 	}
 
 	if err != nil {

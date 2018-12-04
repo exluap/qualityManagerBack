@@ -43,7 +43,7 @@ type JWTData struct {
 	CustomClaims map[string]string `json:"custom,omitempty"`
 }
 
-const version = "1.3.5"
+const version = "1.3.6"
 
 func main() {
 	mode := flag.Bool("makeNewUser", false, "make new user")
@@ -370,21 +370,23 @@ func generateNote(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		}
-	} else if queryInfo["sr_result"] == "non_confirm" { //Претензия клиента не подтвердилась. Результат претензии non_confirm
+	} else if queryInfo["sr_result"] == "non_confirm" && queryInfo["sr_type"] != "ko_several_multi" { //Претензия клиента не подтвердилась. Результат претензии non_confirm
 		note += NON_CONFIRM
 	}
 
 	if queryInfo["fin_korr"] == "0" && queryInfo["close_account"] == "0" && queryInfo["unblock_needed"] == "0" && queryInfo["loyatly_needed"] == "0" && queryInfo["phone_denied"] == "0" && queryInfo["due_date_action"] == "0" && queryInfo["need_other"] == "0" {
 
 	} else {
-		note += "\n "
-		note += ADDITIONAL_INFO + generateAdditionalAction(queryInfo)
+		if queryInfo["sr_type"] != "ko_several_multi" {
+			note += "\n "
+			note += ADDITIONAL_INFO + generateAdditionalAction(queryInfo)
+		}
 
 	}
 
 	if queryInfo["sr_result"] == "non_confirm" && queryInfo["sr_type"] != "ko_several_multi" {
 		note += FOOTER_TEXT
-	} else if queryInfo["sr_result"] == "confirm" && queryInfo["expenditure"] != "1" {
+	} else if queryInfo["sr_result"] == "confirm" && queryInfo["expenditure"] != "1" && queryInfo["sr_type"] != "ko_several_multi" {
 		if queryInfo["no_records_only"] == "1" {
 			note += FOOTER_TEXT
 		} else {
