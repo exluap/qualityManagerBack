@@ -6,7 +6,7 @@
  * website: https://exluap.com
  */
 
-package main
+package tools
 
 import (
 	"database/sql"
@@ -52,7 +52,7 @@ func UserQueries(userId string) ([]byte, error) {
 
 	defer db.Close()
 
-	sqlString := `SELECT time_create, sr_number, sr_type FROM queries_list WHERE siebel_login = ? AND time_create between strftime('%d.%m.%Y %H:%M',date('now'), '+1 days') AND strftime('%d.%m.%Y %H:%M',datetime('now'), '+3 hours') ORDER BY time_create DESC`
+	sqlString := `SELECT time_create, sr_number, sr_type FROM queries_list WHERE siebel_login = ? AND time_create between strftime('%d.%m.%Y %H:%M',date('now')) AND strftime('%d.%m.%Y %H:%M',datetime('now'), '+3 hours') ORDER BY time_create DESC`
 
 	rows, err := db.Query(sqlString, userId)
 	if err != nil {

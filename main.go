@@ -19,6 +19,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"qualityManagerApi/tools"
 	"strings"
 	"time"
 )
@@ -46,7 +47,7 @@ type JWTData struct {
 const version = "1.3.6"
 
 func main() {
-	mode := flag.Bool("makeNewUser", false, "make new user")
+	/** mode := flag.Bool("makeNewUser", false, "make new user")
 	firstName := flag.String("firstname", "Nikita", "First Name")
 	lastName := flag.String("lastname", "Zaycev", "Last Name")
 	middleName := flag.String("middlename", "Alekseevich", "Middle Name")
@@ -72,11 +73,11 @@ func main() {
 		}
 	 **/
 
-	if *mode {
+	/** if *mode {
 		makeNewUser(*firstName, *lastName, *middleName)
-	} else {
-		startWebServer()
-	}
+	} else { */
+	startWebServer()
+	//}
 
 }
 
@@ -109,7 +110,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Println(err)
-		SaveLog("backend", "Login Failed, need logs from server side", "system")
+		tools.SaveLog("backend", "Login Failed, need logs from server side", "system")
 		http.Error(w, "Login Failed", http.StatusUnauthorized)
 	}
 
@@ -118,9 +119,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(body, &userData)
 
 	log.Println("try auth user: " + userData["login"])
-	SaveLog("backend", "try auth user: "+userData["login"], "system")
+	tools.SaveLog("backend", "try auth user: "+userData["login"], "system")
 
-	if CheckIfUserExist(userData["login"], userData["pass"]) {
+	if tools.CheckIfUserExist(userData["login"], userData["pass"]) {
 		claims := JWTData{
 			StandardClaims: jwt.StandardClaims{
 				ExpiresAt: time.Now().Add(11 * time.Hour).Unix(),
@@ -135,7 +136,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 		tokenString, err := token.SignedString([]byte(SECRET))
 		if err != nil {
 			log.Println(err)
-			SaveLog("backend", "Login Failed, need logs from server side", "system")
+			tools.SaveLog("backend", "Login Failed, need logs from server side", "system")
 			http.Error(w, "Login failed!", http.StatusUnauthorized)
 		}
 
@@ -147,14 +148,14 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			log.Println(err)
-			SaveLog("backend", "Login Failed, need logs from server side", "system")
+			tools.SaveLog("backend", "Login Failed, need logs from server side", "system")
 			http.Error(w, "Login failed!", http.StatusUnauthorized)
 		}
 
 		w.Write(json)
 	} else {
 		http.Error(w, "Login failed!", http.StatusUnauthorized)
-		SaveLog("backend", "Login Failed, need logs from server side", "system")
+		tools.SaveLog("backend", "Login Failed, need logs from server side", "system")
 	}
 
 }
@@ -164,7 +165,7 @@ func getQueries(w http.ResponseWriter, r *http.Request) {
 	authArr := strings.Split(authToken, " ")
 
 	if len(authArr) != 2 {
-		SaveLog("backend", "Authentication header is invalid: "+authToken, "system")
+		tools.SaveLog("backend", "Authentication header is invalid: "+authToken, "system")
 		http.Error(w, "Request failed!", http.StatusUnauthorized)
 	}
 
@@ -179,7 +180,7 @@ func getQueries(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Println(err)
-		SaveLog("backend", "Failed Request! Need logs from user", "system")
+		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
 		http.Error(w, "Request failed!", http.StatusUnauthorized)
 	}
 
@@ -187,15 +188,15 @@ func getQueries(w http.ResponseWriter, r *http.Request) {
 
 	userID := data.CustomClaims["userid"]
 
-	jsonData, err := UserQueries(userID)
+	jsonData, err := tools.UserQueries(userID)
 
 	if err != nil {
 		log.Println(err)
-		SaveLog("backend", "Failed Request! Need logs from user", "system")
+		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
 		http.Error(w, "Request failed!", http.StatusUnauthorized)
 	}
 
-	SaveLog("backend", "User request queries list: "+string(jsonData), getUserLogin(w, r))
+	tools.SaveLog("backend", "User request queries list: "+string(jsonData), getUserLogin(w, r))
 
 	w.Write(jsonData)
 }
@@ -207,13 +208,13 @@ func addQuery(w http.ResponseWriter, r *http.Request) {
 
 	if len(authArray) != 2 {
 		log.Println("Auth header is invalid: " + authToken)
-		SaveLog("backend", "Failed Request! Need logs from user", "system")
+		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
 		http.Error(w, "Request failed!", http.StatusUnauthorized)
 	}
 
 	if err != nil {
 		log.Println(err)
-		SaveLog("backend", "Failed Request! Need logs from user", "system")
+		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
 		http.Error(w, "Save Query Failed", http.StatusUnauthorized)
 	}
 
@@ -232,7 +233,7 @@ func addQuery(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &queryData)
 
-	AddQueryToDB(data.CustomClaims["userid"], queryData["sr_number"], queryData["sr_type"], queryData["sr_result"], queryData["sr_repeat_result"], queryData["inform"], queryData["no_records"], queryData["no_records_only"], queryData["expenditure"], queryData["more_thing"], queryData["exp_claim"], queryData["fin_korr"], queryData["close_account"], queryData["unblock_needed"], queryData["loyatly_needed"], queryData["phone_denied"], queryData["du_date_action"], queryData["due_date_zero"], queryData["due_date_move"], queryData["need_other"])
+	tools.AddQueryToDB(data.CustomClaims["userid"], queryData["sr_number"], queryData["sr_type"], queryData["sr_result"], queryData["sr_repeat_result"], queryData["inform"], queryData["no_records"], queryData["no_records_only"], queryData["expenditure"], queryData["more_thing"], queryData["exp_claim"], queryData["fin_korr"], queryData["close_account"], queryData["unblock_needed"], queryData["loyatly_needed"], queryData["phone_denied"], queryData["du_date_action"], queryData["due_date_zero"], queryData["due_date_move"], queryData["need_other"])
 
 	res := &Resultation{
 		Result: "ok",
@@ -240,7 +241,7 @@ func addQuery(w http.ResponseWriter, r *http.Request) {
 
 	logi, err := json.Marshal(queryData)
 
-	SaveLog("backend", "Saved query: "+string(logi), getUserLogin(w, r))
+	tools.SaveLog("backend", "Saved query: "+string(logi), getUserLogin(w, r))
 
 	showResponse, _ := json.Marshal(res)
 
@@ -258,17 +259,17 @@ func getQuery(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &queryInfo)
 
-	jsonData, err := GetQueryInfo(queryInfo["sr_number"])
+	jsonData, err := tools.GetQueryInfo(queryInfo["sr_number"])
 
 	if err != nil {
 		log.Println(err)
-		SaveLog("backend", "Failed Request! Need logs from user", "system")
+		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
 		http.Error(w, "Request failed!", http.StatusUnauthorized)
 	}
 
 	w.Write(jsonData)
 
-	SaveLog("backend", "User response for getQuery: "+string(jsonData), getUserLogin(w, r))
+	tools.SaveLog("backend", "User response for getQuery: "+string(jsonData), getUserLogin(w, r))
 
 }
 
@@ -288,15 +289,15 @@ func generateNote(w http.ResponseWriter, r *http.Request) {
 	//Заголовок
 
 	if queryInfo["sr_type"] == "ko_several_multi" {
-		note += KO_SEVERAL_MULTI + "\n"
-		note += DETAIL_CALL + "\n"
-		note += KO_BODY + "\n"
+		note += tools.KO_SEVERAL_MULTI + "\n"
+		note += tools.DETAIL_CALL + "\n"
+		note += tools.KO_BODY + "\n"
 	} else if queryInfo["sr_type"] == "ko_repeat" {
-		note = CLAIM_TITLE
-		note += KOLLEGI_REPEAT
+		note = tools.CLAIM_TITLE
+		note += tools.KOLLEGI_REPEAT
 	} else {
-		note = CLAIM_TITLE
-		note += KOLLEGI
+		note = tools.CLAIM_TITLE
+		note += tools.KOLLEGI
 	}
 
 	//Тело
@@ -307,38 +308,38 @@ func generateNote(w http.ResponseWriter, r *http.Request) {
 			if queryInfo["sr_result"] == "confirm" { //Подтверждена полностью
 				if queryInfo["no_records"] == "1" || queryInfo["no_records_only"] == "1" {
 					if queryInfo["no_records_only"] == "1" { //Только по отсутствию звонка
-						note += FULL_EXP_NO_CALL
+						note += tools.FULL_EXP_NO_CALL
 					} else if queryInfo["no_records_only"] == "0" { //Не по отсутствию звонка
 
 						if queryInfo["more_thing"] == "1" { //Несколько сутей
 							if queryInfo["exp_claim"] == "1" {
-								note += FULL_MORE_THING
+								note += tools.FULL_MORE_THING
 							} else if queryInfo["exp_claim"] == "0" {
-								note += FULL_MORE_CALL
+								note += tools.FULL_MORE_CALL
 							}
 						} else if queryInfo["more_thing"] == "0" { //Одна суть
-							note += FULL_EXP_EXIST_ALL_CALL
+							note += tools.FULL_EXP_EXIST_ALL_CALL
 						}
 					}
 				} else if queryInfo["no_records"] == "0" || queryInfo["no_records_only"] == "0" {
-					note += FULL_EXP_EXIST_ALL_CALL
+					note += tools.FULL_EXP_EXIST_ALL_CALL
 				}
 			} else if queryInfo["sr_result"] == "partial" { //Подтверждена частично
 				if queryInfo["no_records"] == "1" || queryInfo["no_records_only"] == "1" {
 					if queryInfo["more_thing"] == "1" {
 						if queryInfo["exp_claim"] == "1" {
-							note += PARTIAL_EXP_MORE_THING
+							note += tools.PARTIAL_EXP_MORE_THING
 						} else if queryInfo["exp_claim"] == "0" {
-							note += PARTIAL_EXP
+							note += tools.PARTIAL_EXP
 						}
 					} else if queryInfo["more_thing"] == "0" {
-						note += PARTIAL_EXP_NO_CALL
+						note += tools.PARTIAL_EXP_NO_CALL
 					}
 				} else if queryInfo["no_records"] == "0" || queryInfo["no_records_only"] == "0" {
 					if queryInfo["more_thing"] == "1" {
-						note += PARTIAL_EXP_MORE_THING_ALL
+						note += tools.PARTIAL_EXP_MORE_THING_ALL
 					} else if queryInfo["more_thing"] == "0" {
-						note += PARTIAL_EXP_ONE_THING
+						note += tools.PARTIAL_EXP_ONE_THING
 					}
 				}
 			}
@@ -350,59 +351,59 @@ func generateNote(w http.ResponseWriter, r *http.Request) {
 
 					if queryInfo["no_records"] == "1" { //Нет одной из записей
 						if queryInfo["more_thing"] == "1" { //Несколько сутей
-							note += CONFIRM_WIHOUT_EXP_MORE_THING
+							note += tools.CONFIRM_WIHOUT_EXP_MORE_THING
 						} else if queryInfo["more_thing"] == "0" { //Одна суть
-							note += CONFIRM_WIHOUT_EXP_ALL_CALLS
+							note += tools.CONFIRM_WIHOUT_EXP_ALL_CALLS
 						}
 					} else if queryInfo["no_records"] == "0" {
-						note += CONFIRM_WIHOUT_EXP_ALL_CALLS
+						note += tools.CONFIRM_WIHOUT_EXP_ALL_CALLS
 					}
 
 				} else if queryInfo["no_records_only"] == "1" { //Только по отсутствию звонк
-					note += CONFIRM_WIHOUT_EXP_NO_CALLS
+					note += tools.CONFIRM_WIHOUT_EXP_NO_CALLS
 				}
 			} else if queryInfo["sr_result"] == "partial" { //Частично
 				if queryInfo["no_records"] == "0" && queryInfo["no_records_only"] == "0" {
-					note += PARTIAL_CHANGED
+					note += tools.PARTIAL_CHANGED
 				} else {
-					note += PARTIAL_WITHOUT_EXP
-					note += ALL_AS_WE_CAN
+					note += tools.PARTIAL_WITHOUT_EXP
+					note += tools.ALL_AS_WE_CAN
 				}
 			}
 		}
 	} else if queryInfo["sr_result"] == "non_confirm" { //Претензия клиента не подтвердилась. Результат претензии non_confirm
-		note += NON_CONFIRM
+		note += tools.NON_CONFIRM
 	}
 
 	if queryInfo["fin_korr"] == "0" && queryInfo["close_account"] == "0" && queryInfo["unblock_needed"] == "0" && queryInfo["loyatly_needed"] == "0" && queryInfo["phone_denied"] == "0" && queryInfo["due_date_action"] == "0" && queryInfo["need_other"] == "0" {
 
 	} else {
 		note += "\n "
-		note += ADDITIONAL_INFO + generateAdditionalAction(queryInfo)
+		note += tools.ADDITIONAL_INFO + generateAdditionalAction(queryInfo)
 
 	}
 
 	if queryInfo["sr_result"] == "non_confirm" && queryInfo["sr_type"] != "ko_several_multi" {
-		note += FOOTER_TEXT
+		note += tools.FOOTER_TEXT
 	} else if queryInfo["sr_result"] == "confirm" && queryInfo["expenditure"] != "1" {
 		if queryInfo["no_records_only"] == "1" {
-			note += FOOTER_TEXT
+			note += tools.FOOTER_TEXT
 		} else {
-			note += FOOTER_TEXT
-			note += RESULT_OF_CHECK
+			note += tools.FOOTER_TEXT
+			note += tools.RESULT_OF_CHECK
 		}
 	} else if queryInfo["sr_result"] == "partial" && queryInfo["sr_type"] != "ko_several_multi" {
-		note += FOOTER_TEXT
+		note += tools.FOOTER_TEXT
 
 		if queryInfo["expenditure"] == "1" {
-			note += EXP_FOOTER
+			note += tools.EXP_FOOTER
 		}
 
 	} else if queryInfo["sr_result"] == "confirm" && queryInfo["expenditure"] == "1" && queryInfo["sr_type"] != "ko_several_multi" {
-		note += FOOTER_TEXT
+		note += tools.FOOTER_TEXT
 
 		if queryInfo["no_records_only"] != "1" {
-			note += EXP_FOOTER
+			note += tools.EXP_FOOTER
 		} else {
 			note += "Результат проверки (для БЭК ОФИСА): нет записи разговора (-ов)"
 		}
@@ -421,7 +422,7 @@ func generateNote(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	SaveLog("backend", "User response for generate Note Full: "+string(showResponse), getUserLogin(w, r))
+	tools.SaveLog("backend", "User response for generate Note Full: "+string(showResponse), getUserLogin(w, r))
 
 	w.Write([]byte(showResponse))
 }
@@ -556,7 +557,7 @@ func generateAdditionalAction(queryInfo map[string]string) string {
 	}
 
 	if queryInfo["fin_korr"] == "1" && queryInfo["close_account"] == "1" {
-		result += "Передан запрос на расторжение. Запрос на корректировки при необходимости передаст сотрудник ТМ "
+		result += "<УКАЖИ результат решения вопроса с расторжением и корректировками>"
 
 	}
 
@@ -599,7 +600,7 @@ func makeNewUser(firstName, lastName, middleName string) {
 
 	login = string(firstName[0]) + string(middleName[0]) + lastName
 
-	pass, result := AddNewUser(firstName, lastName, middleName, login)
+	pass, result := tools.AddNewUser(firstName, lastName, middleName, login)
 
 	if result {
 		log.Println("User Login: " + login + "\n Password: " + pass)
@@ -642,7 +643,7 @@ func deleteSR(w http.ResponseWriter, r *http.Request) {
 
 	userID := data.CustomClaims["userid"]
 
-	result := DeleteQuery(requestBody["sr_number"], userID)
+	result := tools.DeleteQuery(requestBody["sr_number"], userID)
 
 	if err != nil {
 		log.Println(err)
@@ -657,7 +658,7 @@ func deleteSR(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Huston we have a problem. See a log!"))
 	}
 
-	SaveLog("backend", "User delete SR: "+requestBody["sr_number"], userID)
+	tools.SaveLog("backend", "User delete SR: "+requestBody["sr_number"], userID)
 
 }
 
@@ -694,7 +695,7 @@ func addingLog(w http.ResponseWriter, r *http.Request) {
 
 	userID := data.CustomClaims["userid"]
 
-	SaveLog(requestBody["inter"], requestBody["infoText"], userID)
+	tools.SaveLog(requestBody["inter"], requestBody["infoText"], userID)
 
 	resultShow, err := json.Marshal("Log is saved")
 
