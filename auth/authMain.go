@@ -21,9 +21,9 @@ import (
 )
 
 /**
-@api {get} /login
+@api {get} /login Getting auth token
 @apiVersion 1.0.0
-@apiName User Auth
+@apiName GetToken
 @apiGroup Authentication
 
 @apiDescription Get auth Token for use some methods for working
@@ -33,7 +33,7 @@ import (
 
 @apiSuccess {String} token Bearer Auth token for use
 
-@apiSuccessExample {json} Success-Response:
+@apiSuccessExample {json} Success-Response
 	HTTP/1.1 200 OK
      {
        "token": "AUTH_TOKEN"
@@ -42,11 +42,8 @@ import (
 
 @apiError Unauthorized Getting Bad Credentials
 
-@apiErrorExample Response (example):
-	HTTP/1.1 401 Not Authenticated
-	{
-		"error": "Request failed!"
-	}
+@apiErrorExample Error-Response
+		"Request failed!"
 */
 
 func Login(w http.ResponseWriter, r *http.Request) {

@@ -22,6 +22,32 @@ import (
 	"strings"
 )
 
+/**
+@api {post} /in_over Checking overtime or set it
+@apiName PostOver
+@apiVersion 1.0.0
+@apiGroup User
+@apiHeader token Auth Token of user with information about him
+
+@apiDescription Getting info about overtime or set it as u need
+
+@apiParam {String} overtime Result of overtime. 1 - is active, 0 - is inactive
+@apiParam {String} action What r u need? "check" - checking if user in overtime or "update" - set overtime as !overtime
+
+
+@apiSuccess {String} Result result of action
+
+@apiSuccessExample {json} Success-Response (check action)
+	true
+@apiSuccessExample {json} Success-Response (set overtime)
+	Ok
+
+@apiError Unauthorized Getting Bad Credentials
+
+@apiErrorExample Error-Response
+		"Request failed!"
+*/
+
 func CheckOver(w http.ResponseWriter, r *http.Request) {
 	authToken := r.Header.Get("Authorization")
 	authArr := strings.Split(authToken, " ")

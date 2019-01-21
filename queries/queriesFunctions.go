@@ -23,13 +23,49 @@ import (
 )
 
 /**
-@api {get} /get_queries
+@api {get} /get_queries Getting today records
 @apiVersion 1.0.0
-@apiName Get queries of user
+@apiName GetQueryOfUser
 @apiGroup Queries
+@apiHeader token Auth Token of user with information about him
 
 
 @apiDescription Getting today queries of user
+
+@apiSuccess {Object[]} Queries Array of queries
+@apiSuccess {String} Queries.overtime Type of query
+@apiSuccess {String} Queries.siebel_login Login of user in DataBase
+@apiSuccess {String} Queries.sr_number Special number, not ID
+@apiSuccess {String} Queries.sr_result Result of SR
+@apiSuccess {String} Queries.sr_type Type of SR
+@apiSuccess {String} Queries.time_create Date and Time of create record in DataBase
+
+
+@apiSuccessExample {json} Success-Response
+	[
+  {
+    "overtime": "Нет",
+    "siebel_login": "KOBolotova",
+    "sr_number": "541658498",
+    "sr_result": "confirm",
+    "sr_type": "Обычное КО",
+    "time_create": "13.01.2018 00:53"
+  },
+  {
+    "overtime": "Нет",
+    "siebel_login": "KOBolotova",
+    "sr_number": "5-9653258",
+    "sr_result": "confirm",
+    "sr_type": "Обычное КО",
+    "time_create": "13.01.2018 00:51"
+  }
+]
+
+@apiError Unauthorized Getting Bad Credentials
+
+@apiErrorExample Error-Response
+		"Request failed!"
+
 */
 
 func GetQueries(w http.ResponseWriter, r *http.Request) {
@@ -72,6 +108,51 @@ func GetQueries(w http.ResponseWriter, r *http.Request) {
 
 	w.Write(jsonData)
 }
+
+/**
+@api {post} /add_query Adding new record
+@apiVersion 1.0.0
+@apiName AddQuery
+@apiGroup Queries
+@apiHeader token Auth Token of user with information about him
+
+@apiDescription Adding new record with info about query to DataBase
+
+@apiParam {String} sr_number Number of SR
+@apiParam {String} sr_result Result of SR
+@apiParam {String} sr_repeat_result Result of SR if it is repeat SR
+@apiParam {String} no_records
+@apiParam {String} no_records_only
+@apiParam {String} expenditure
+@apiParam {String} more_thing
+@apiParam {String} exp_claim
+@apiParam {String} fin_korr
+@apiParam {String} close_account
+@apiParam {String} unblock_needed
+@apiParam {String} loyatly_needed
+@apiParam {String} phone_denied
+@apiParam {String} due_date_action
+@apiParam {String} due_date_zero
+@apiParam {String} due_date_move
+@apiParam {String} inform Type of Information
+@apiParam {String} sr_type Type of SR
+@apiParam {String} need_other
+@apiParam {String} additional_actions
+@apiParam {String} how_inform Inform instruction
+@apiParam {String} note Generated note text
+
+@apiSuccess {String} Result Result of creating
+@apiSuccessExample {json} Success-Response
+	{
+		"Result": "ok"
+	}
+
+@apiError Unauthorized Getting Bad Credentials
+
+@apiErrorExample Error-Response
+		"Request failed!"
+
+*/
 
 func AddQuery(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
@@ -120,6 +201,82 @@ func AddQuery(w http.ResponseWriter, r *http.Request) {
 	w.Write(showResponse)
 }
 
+/**
+@api {get} /get_query Getting record info
+@apiName GetQuery
+@apiVersion 1.0.0
+@apiGroup Queries
+@apiHeader token Auth Token of user with information about him
+
+@apiDescription Getting record info by SR number
+
+@apiParam {String} sr_number Number of SR
+
+@apiSuccess {String} additional_actions
+@apiSuccess {String} admin_check
+@apiSuccess {String} close_account
+@apiSuccess {String} due_date_action
+@apiSuccess {String} due_date_move
+@apiSuccess {String} due_date_zero
+@apiSuccess {String} exp_claim
+@apiSuccess {String} expenditure
+@apiSuccess {String} fin_korr
+@apiSuccess {String} how_inform
+@apiSuccess {Integer} id
+@apiSuccess {String} inform
+@apiSuccess {String} loyatly_needed
+@apiSuccess {String} more_thing
+@apiSuccess {String} need_other
+@apiSuccess {String} no_records
+@apiSuccess {String} no_records_only
+@apiSuccess {String} note
+@apiSuccess {String} overtime
+@apiSuccess {String} phone_denied
+@apiSuccess {String} sr_number
+@apiSuccess {String} sr_repeat_result
+@apiSuccess {String} sr_result
+@apiSuccess {String} sr_type
+@apiSuccess {String} unblock_needed
+
+@apiSuccessExample {json} Success-Response
+[
+  {
+    "additional_actions": "",
+    "admin_check": 0,
+    "close_account": "0",
+    "due_date_action": "",
+    "due_date_move": "0",
+    "due_date_zero": "0",
+    "exp_claim": "0",
+    "expenditure": "0",
+    "fin_korr": "0",
+    "how_inform": "",
+    "id": 1344,
+    "inform": "",
+    "loyatly_needed": "0",
+    "more_thing": "0",
+    "need_other": "0",
+    "no_records": "0",
+    "no_records_only": "0",
+    "note": "ОТВЕТ ПО ПРЕТЕНЗИИ: \nКоллеги все проверили и выяснили, что действительно была ошибка. Мы сделаем все возможное,чтобы такое больше не повторилось, приносим извинения.\n\nДЕТАЛИ РАЗБОРА: \nДата, время, тип коммуникации: \n < > \nСуть претензии:\n < > wsadsadsad\nРезультат проверки: \n  < ___ >",
+    "overtime": "0",
+    "phone_denied": "0",
+    "sr_number": "123455667890",
+    "sr_repeat_result": "",
+    "sr_result": "confirm",
+    "sr_type": "ko_normal",
+    "unblock_needed": "0"
+  }
+]
+
+@apiError Unauthorized Getting Bad Credentials
+
+@apiErrorExample Error-Response
+		"Request failed!"
+
+
+*/
+
 func GetQuery(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 
@@ -144,6 +301,54 @@ func GetQuery(w http.ResponseWriter, r *http.Request) {
 	tools.SaveLog("backend", "User response for getQuery: "+string(jsonData), user.GetUserLogin(w, r))
 
 }
+
+/**
+@api {post} /generate_note_and_instruction Generate Note text and get instructions
+@apiName GetInstructions
+@apiVersion 1.0.0
+@apiGroup Queries
+@apiHeader token Auth Token of user with information about him
+
+@apiDescription Generate Note text and instruction for query with special param
+
+@apiParam {String} sr_number Number of SR
+@apiParam {String} sr_result Result of SR
+@apiParam {String} sr_repeat_result Result of SR if it is repeat SR
+@apiParam {String} no_records
+@apiParam {String} no_records_only
+@apiParam {String} expenditure
+@apiParam {String} more_thing
+@apiParam {String} exp_claim
+@apiParam {String} fin_korr
+@apiParam {String} close_account
+@apiParam {String} unblock_needed
+@apiParam {String} loyatly_needed
+@apiParam {String} phone_denied
+@apiParam {String} due_date_action
+@apiParam {String} due_date_zero
+@apiParam {String} due_date_move
+@apiParam {String} inform Type of Information
+@apiParam {String} sr_type Type of SR
+@apiParam {String} need_other
+
+
+@apiSuccess {String} Note Note text for Query
+@apiSuccess {String} InfoInstr Information instruction
+@apiSuccess {String} AdditionalAction Additional action instruction
+
+@apiSuccessExample {json} Success-Response
+{
+  "Note": "ОТВЕТ ПО ПРЕТЕНЗИИ: \nКоллеги все проверили и выяснили, что действительно была ошибка. Мы сделаем все возможное,чтобы такое больше не повторилось, приносим извинения.\n Доп. инфо: \n<УКАЖИ результат решения вопроса с расторжением и корректировками>\n\nДЕТАЛИ РАЗБОРА: \nДата, время, тип коммуникации: \n < > \nСуть претензии:\n < > \nРезультат проверки: \n  < ___ >",
+  "InfoInstr": "Выбери подстатус - Обоснована. Фин. кор-ки.\n \n \n ПОРЯДОК ИНФОРМИРОВАНИЯ \n \n Зарегистрируй SR Исходящий e-mail - Информирование \n -В ПО запроса напиши текст ответа клиенту (придумывай сам)\n-Вложения (если надо) вкладывай до выполнения\n-Для срочной отправки перед выполнением поставь 1-й приоритет",
+  "AdditionalAction": "Действуй по инструкции для расторжения договора. \n \n"
+}
+
+@apiError Unauthorized Getting Bad Credentials
+
+@apiErrorExample Error-Response
+		"Request failed!"
+
+*/
 
 func GenerateNote(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
