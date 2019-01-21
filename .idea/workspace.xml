@@ -2,8 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4bcc6da8-9899-45c9-b4fa-84a83872243a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apidoc.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth/authMain.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/constants/settings.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/models/modelsInfo.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/queries/queriesFunctions.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/simpleLogging.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/user/userFunctions.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.drone.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/bda97877-b59c-4223-8dd5-1b821c0bbde6.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/bda97877-b59c-4223-8dd5-1b821c0bbde6.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.MD" beforeDir="false" afterPath="$PROJECT_DIR$/README.MD" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/goqualityBD.db" beforeDir="false" afterPath="$PROJECT_DIR$/goqualityBD.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/DBUtil.go" beforeDir="false" afterPath="$PROJECT_DIR$/tools/DBUtil.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/phrases.go" beforeDir="false" afterPath="$PROJECT_DIR$/constants/phrases.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -41,78 +56,81 @@
       <path>
         <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
         <item name="goqualityBD.db" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="main: schema" type="90513b60:SqliteImplModel$Schema" />
+        <item name="users: table" type="ffe0bd85:SqliteImplModel$Table" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="goqualityBD.db" type="feb32156:DbDataSourceImpl" />
         <item name="collations" type="d4e8921:DatabaseStructure$FamilyGroup" />
       </path>
     </expand>
     <select />
   </component>
-  <component name="FUSProjectUsageTrigger">
-    <session id="-1611608287">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="15" />
-          <entry key="project.open.time.0" value="2" />
-          <entry key="project.open.time.1" value="1" />
-          <entry key="project.open.time.2" value="1" />
-          <entry key="project.open.time.5" value="7" />
-          <entry key="project.open.time.6" value="6" />
-          <entry key="project.open.time.7" value="1" />
-          <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="19" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="Jenkinsfile" value="1" />
-          <entry key="c" value="1" />
-          <entry key="gitignore" value="1" />
-          <entry key="go" value="11" />
-          <entry key="sql" value="7" />
-          <entry key="users" value="2" />
-          <entry key="yml" value="2" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="C++" value="1" />
-          <entry key="Database Element" value="2" />
-          <entry key="Git file" value="1" />
-          <entry key="Go" value="11" />
-          <entry key="PLAIN_TEXT" value="1" />
-          <entry key="SQL" value="2" />
-          <entry key="Scratch" value="5" />
-          <entry key="YAML" value="2" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="cell" value="216" />
-          <entry key="go" value="29130" />
-          <entry key="sql" value="1456" />
-          <entry key="txt" value="236" />
-          <entry key="yml" value="299" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="Go" value="29130" />
-          <entry key="PLAIN_TEXT" value="236" />
-          <entry key="SQL" value="506" />
-          <entry key="Scratch" value="1166" />
-          <entry key="YAML" value="299" />
-        </counts>
-      </usages-collector>
-    </session>
-  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-5081">
-              <caret line="46" column="22" selection-start-line="46" selection-start-column="22" selection-end-line="46" selection-end-column="22" />
+            <state relative-caret-position="321">
+              <caret line="33" column="33" selection-start-line="33" selection-start-column="33" selection-end-line="33" selection-end-column="33" />
               <folding>
-                <element signature="e#204#412#0" expanded="true" />
+                <element signature="e#204#387#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/queries/queriesFunctions.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="179">
+              <caret line="31" column="49" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
+              <folding>
+                <element signature="e#207#363#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/apidoc.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="135">
+              <caret line="9" column="24" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tools/simpleLogging.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="632">
+              <caret line="55" column="4" selection-start-line="55" selection-start-column="4" selection-end-line="55" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/user/userFunctions.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="376">
+              <caret line="74" column="1" selection-start-line="74" selection-start-column="1" selection-end-line="74" selection-end-column="1" />
+              <folding>
+                <element signature="e#204#340#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/auth/authMain.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="266">
+              <caret line="38" column="22" selection-start-line="38" selection-start-column="22" selection-end-line="38" selection-end-column="22" />
+              <folding>
+                <element signature="e#204#388#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -121,29 +139,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tools/DBUtil.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="54" column="159" selection-start-line="54" selection-start-column="159" selection-end-line="54" selection-end-column="159" />
-              <folding>
-                <element signature="e#204#308#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/bda97877-b59c-4223-8dd5-1b821c0bbde6/console.sql">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="16" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.drone.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="40" selection-start-line="10" selection-start-column="40" selection-end-line="10" selection-end-column="40" />
+            <state relative-caret-position="5122">
+              <caret line="371" selection-start-line="371" selection-end-line="371" />
             </state>
           </provider>
         </entry>
@@ -176,15 +173,21 @@
       <find>закрытие</find>
       <find>обы</find>
       <find>time</find>
-      <find>tools.</find>
       <find>передан з</find>
       <find>ALL_AS</find>
       <find>мы сделаем</find>
+      <find>over</find>
+      <find>полно</find>
+      <find>проверили Ваше</find>
+      <find>JWTData</find>
+      <find>tools.</find>
     </findStrings>
     <replaceStrings>
       <replace>&lt;напиши описание</replace>
       <replace>НАПИШИ ОПИСАНИЕ</replace>
       <replace />
+      <replace>models.JWTData</replace>
+      <replace>constants.</replace>
     </replaceStrings>
   </component>
   <component name="GOROOT" path="/usr/local/go" />
@@ -195,25 +198,28 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/bda97877-b59c-4223-8dd5-1b821c0bbde6/console.sql" />
         <option value="$PROJECT_DIR$/.drone.yml" />
         <option value="$PROJECT_DIR$/phrases.go" />
         <option value="$PROJECT_DIR$/DBUtil.go" />
+        <option value="$APPLICATION_CONFIG_DIR$/consoles/db/bda97877-b59c-4223-8dd5-1b821c0bbde6/console.sql" />
         <option value="$PROJECT_DIR$/tools/DBUtil.go" />
         <option value="$PROJECT_DIR$/tools/phrases.go" />
+        <option value="$PROJECT_DIR$/const/settings.go" />
+        <option value="$PROJECT_DIR$/constants/settings.go" />
+        <option value="$PROJECT_DIR$/models/modelsInfo.go" />
+        <option value="$PROJECT_DIR$/tools/simpleLogging.go" />
+        <option value="$PROJECT_DIR$/README.MD" />
+        <option value="$PROJECT_DIR$/user/userFunctions.go" />
         <option value="$PROJECT_DIR$/main.go" />
+        <option value="$PROJECT_DIR$/queries/queriesFunctions.go" />
+        <option value="$PROJECT_DIR$/apidoc.json" />
+        <option value="$PROJECT_DIR$/auth/authMain.go" />
       </list>
     </option>
   </component>
-  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsGulpfileManager">
-    <detection-done>true</detection-done>
-    <sorting>DEFINITION_ORDER</sorting>
-  </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="y" value="26" />
-    <option name="width" value="1425" />
+    <option name="width" value="1440" />
     <option name="height" value="801" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -230,6 +236,36 @@
               <item name="qualityManagerApi" type="b2602c69:ProjectViewProjectNode" />
               <item name="qualityManagerApi" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="qualityManagerApi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="qualityManagerApi" type="462c0819:PsiDirectoryNode" />
+              <item name="auth" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="qualityManagerApi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="qualityManagerApi" type="462c0819:PsiDirectoryNode" />
+              <item name="constants" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="qualityManagerApi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="qualityManagerApi" type="462c0819:PsiDirectoryNode" />
+              <item name="models" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="qualityManagerApi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="qualityManagerApi" type="462c0819:PsiDirectoryNode" />
+              <item name="queries" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="qualityManagerApi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="qualityManagerApi" type="462c0819:PsiDirectoryNode" />
+              <item name="tools" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="qualityManagerApi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="qualityManagerApi" type="462c0819:PsiDirectoryNode" />
+              <item name="user" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -240,129 +276,21 @@
     <property name="DatabaseDriversLRU" value="sqlite" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="GO_FMT" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="database.console.LAST_STATE" value="false" />
     <property name="database.data.extractors.current.id" value="SQL Inserts" />
     <property name="go.gopath.indexing.explicitly.defined" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
+    <property name="settings.editor.selected.configurable" value="fileTemplates" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/const" />
       <recent name="$PROJECT_DIR$/tools" />
       <recent name="$PROJECT_DIR$" />
     </key>
-  </component>
-  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
-    <UpdatedFiles>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Updated from server" />
-        <option name="myStatusName" value="Changed on server" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="CHANGED_ON_SERVER" />
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Updated" />
-          <option name="myStatusName" value="Changed" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="UPDATED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Created" />
-          <option name="myStatusName" value="Created" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="CREATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/README.MD</PATH>
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Deleted" />
-          <option name="myStatusName" value="Deleted" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="true" />
-          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Restored" />
-          <option name="myStatusName" value="Will be restored" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="RESTORED" />
-        </FILE-GROUP>
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Modified" />
-        <option name="myStatusName" value="Modified" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MODIFIED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Skipped" />
-        <option name="myStatusName" value="Skipped" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="SKIPPED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Merged with conflicts" />
-        <option name="myStatusName" value="Will be merged with conflicts" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MERGED_WITH_CONFLICTS" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Merged with tree conflicts" />
-        <option name="myStatusName" value="Merged with tree conflicts" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Merged with property conflicts" />
-        <option name="myStatusName" value="Will be merged with property conflicts" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Merged" />
-        <option name="myStatusName" value="Will be merged" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MERGED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Not in repository" />
-        <option name="myStatusName" value="Not in repository" />
-        <option name="mySupportsDeletion" value="true" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="UNKNOWN" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Locally added" />
-        <option name="myStatusName" value="Locally added" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="LOCALLY_ADDED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Locally removed" />
-        <option name="myStatusName" value="Locally removed" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="LOCALLY_REMOVED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Switched" />
-        <option name="myStatusName" value="Switched" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="SWITCHED" />
-      </FILE-GROUP>
-    </UpdatedFiles>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -389,16 +317,15 @@
     </configuration>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1" y="26" width="1440" height="801" extended-state="6" />
+    <frame x="0" y="23" width="1440" height="805" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49789914" visible="true" weight="0.31616595" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49789914" visible="true" weight="0.33333334" />
       <window_info id="Structure" order="1" sideWeight="0.5021008" side_tool="true" weight="0.2494577" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="SonarQube" weight="0.32863188" />
-      <window_info anchor="bottom" id="REST Client" weight="0.42595205" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32863188" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32863188" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32678822" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39915374" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -406,20 +333,20 @@
       <window_info anchor="bottom" id="Database Console" order="7" weight="0.32863188" />
       <window_info anchor="bottom" id="Database Changes" order="8" weight="0.32863188" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49963847" weight="0.32863188" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.4989154" visible="true" weight="0.32863188" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4989154" weight="0.32678822" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5010846" side_tool="true" weight="0.32863188" />
       <window_info anchor="bottom" id="Messages" order="12" visible="true" weight="0.32863188" />
+      <window_info anchor="bottom" id="SonarQube" order="13" weight="0.32863188" />
+      <window_info anchor="bottom" id="REST Client" order="14" weight="0.42595205" />
+      <window_info anchor="bottom" id="Docker" order="15" show_stripe_button="false" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info anchor="right" id="Database" order="3" weight="0.329718" />
+      <window_info anchor="right" id="Database" order="3" weight="0.32904148" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
-  </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added gitignore and update some func" />
@@ -433,17 +360,12 @@
     <MESSAGE value="Chaged response for queries list" />
     <MESSAGE value="reverse" />
     <MESSAGE value="Updated:&#10;* Phrases&#10;* Bug with list of queries" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated:&#10;* Phrases&#10;* Bug with list of queries" />
+    <MESSAGE value="updated version num" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated version num" />
   </component>
   <component name="editorHistoryManager">
     <entry file="das://bda97877-b59c-4223-8dd5-1b821c0bbde6/schema/main/table/users.sql" />
-    <entry file="das://bda97877-b59c-4223-8dd5-1b821c0bbde6/schema/main/table/users">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://bda97877-b59c-4223-8dd5-1b821c0bbde6/schema/main/table/users" />
     <entry file="file:///usr/local/go/src/runtime/cgo/gcc_libinit_windows.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -454,30 +376,12 @@
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/Jenkinsfile">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/bda97877-b59c-4223-8dd5-1b821c0bbde6/console.sql">
+    <entry file="file://$PROJECT_DIR$/Jenkinsfile" />
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/bda97877-b59c-4223-8dd5-1b821c0bbde6/console.sql" />
+    <entry file="file://$PROJECT_DIR$/constants/phrases.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="16" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/phrases.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-218">
-          <caret line="29" column="116" selection-start-line="29" selection-start-column="116" selection-end-line="29" selection-end-column="116" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/DBUtil.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="54" column="159" selection-start-line="54" selection-start-column="159" selection-end-line="54" selection-end-column="159" />
-          <folding>
-            <element signature="e#204#308#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="555">
+          <caret line="37" column="71" lean-forward="true" selection-start-line="37" selection-start-column="71" selection-end-line="37" selection-end-column="71" />
         </state>
       </provider>
     </entry>
@@ -488,15 +392,105 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.go">
+    <entry file="file://$PROJECT_DIR$/models/modelsInfo.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5081">
-          <caret line="46" column="22" selection-start-line="46" selection-start-column="22" selection-end-line="46" selection-end-column="22" />
+        <state relative-caret-position="330">
+          <caret line="22" column="5" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/constants/settings.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="1" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tools/simpleLogging.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="632">
+          <caret line="55" column="4" selection-start-line="55" selection-start-column="4" selection-end-line="55" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.MD">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor>
+            <caret column="21" selection-start-column="21" selection-end-column="21" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/user/userFunctions.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="376">
+          <caret line="74" column="1" selection-start-line="74" selection-start-column="1" selection-end-line="74" selection-end-column="1" />
           <folding>
-            <element signature="e#204#412#0" expanded="true" />
+            <element signature="e#204#340#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tools/DBUtil.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5122">
+          <caret line="371" selection-start-line="371" selection-end-line="371" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="321">
+          <caret line="33" column="33" selection-start-line="33" selection-start-column="33" selection-end-line="33" selection-end-column="33" />
+          <folding>
+            <element signature="e#204#387#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/queries/queriesFunctions.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="31" column="49" selection-start-line="31" selection-start-column="49" selection-end-line="31" selection-end-column="49" />
+          <folding>
+            <element signature="e#207#363#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/apidoc.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="9" column="24" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/authMain.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="38" column="22" selection-start-line="38" selection-start-column="22" selection-end-line="38" selection-end-column="22" />
+          <folding>
+            <element signature="e#204#388#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ScopeChooserConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>

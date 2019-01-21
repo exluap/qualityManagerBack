@@ -1,0 +1,12 @@
+{
+  "name": "Quality Manager Backend API",
+  "version": "1.0.0",
+  "description": "API info of Quality Manager Backend",
+  "title": "Quality Manager Backend API",
+
+  "template": {
+    "withCompare": true,
+    "withGenerator": false,
+    "forceLanguage": "en"
+  }
+}

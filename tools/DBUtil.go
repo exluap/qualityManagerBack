@@ -52,7 +52,7 @@ func UserQueries(userId string) ([]byte, error) {
 
 	defer db.Close()
 
-	sqlString := `SELECT time_create, sr_number, sr_type FROM queries_list WHERE siebel_login = ? AND time_create between strftime('%d.%m.%Y %H:%M',date('now')) AND strftime('%d.%m.%Y %H:%M',datetime('now'), '+3 hours') ORDER BY time_create DESC`
+	sqlString := `SELECT queries_list.siebel_login, queries_list.sr_number, queries_list.sr_type, queries_list.time_create, queries.sr_result,queries.overtime FROM (queries_list INNER JOIN queries ON queries_list.sr_number = queries.sr_number) WHERE queries_list.siebel_login = ? AND time_create between strftime('%d.%m.%Y %H:%M',date('now')) AND strftime('%d.%m.%Y %H:%M',datetime('now'), '+3 hours') ORDER BY time_create DESC`
 
 	rows, err := db.Query(sqlString, userId)
 	if err != nil {
@@ -83,6 +83,17 @@ func UserQueries(userId string) ([]byte, error) {
 				v = val
 			}
 			entry[col] = v
+
+			if col == "overtime" {
+				switch v {
+				case "1":
+					entry[col] = "Да"
+					break
+				case "0":
+					entry[col] = "Нет"
+					break
+				}
+			}
 		}
 		tableData = append(tableData, entry)
 	}
@@ -94,7 +105,7 @@ func UserQueries(userId string) ([]byte, error) {
 	return []byte(jsonData), nil
 }
 
-func AddQueryToDB(userId, sr_number, sr_type, sr_result, sr_repeat_result, inform, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, need_other string) {
+func AddQueryToDB(userId, sr_number, sr_type, sr_result, sr_repeat_result, inform, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, need_other, note string) {
 	db, err := sql.Open("sqlite3", "./goqualityBD.db")
 
 	if err != nil {
@@ -106,14 +117,17 @@ func AddQueryToDB(userId, sr_number, sr_type, sr_result, sr_repeat_result, infor
 	var sqlQuery string
 
 	if checkIfQueryExist(sr_number) {
-		sqlQuery = `UPDATE queries SET sr_type = ?, sr_result = ?, sr_repeat_result = ?, no_records = ?, no_records_only = ?, expenditure = ?, more_thing = ?, exp_claim = ?, fin_korr = ?, close_account = ?, unblock_needed = ?, loyatly_needed = ?, phone_denied = ?, due_date_action = ?, due_date_zero = ?, due_date_move = ?, inform = ?, need_other = ?, note = "", additional_actions="", how_inform = "" WHERE sr_number = ?`
-		_, err = db.Exec(sqlQuery, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other, sr_number)
+		sqlQuery = `UPDATE queries SET sr_type = ?, sr_result = ?, sr_repeat_result = ?, no_records = ?, no_records_only = ?, expenditure = ?, more_thing = ?, exp_claim = ?, fin_korr = ?, close_account = ?, unblock_needed = ?, loyatly_needed = ?, phone_denied = ?, due_date_action = ?, due_date_zero = ?, due_date_move = ?, inform = ?, need_other = ?, note = ?, additional_actions="", how_inform = "" WHERE sr_number = ?`
+		_, err = db.Exec(sqlQuery, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other, sr_number, note)
 	} else {
-		sqlQuery = `INSERT INTO queries (sr_number, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other, note, additional_actions, how_inform) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, "", "", "")`
-		_, err = db.Exec(sqlQuery, sr_number, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other)
-	}
+		sqlQuery = `INSERT INTO queries (sr_number, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other, note, additional_actions, how_inform) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?, "", "")`
+		_, err = db.Exec(sqlQuery, sr_number, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other, note)
 
-	//_, err = db.Exec(sqlQuery, sr_number, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform)
+		if CheckIfUserInOver(userId) {
+			sqlQuery = "UPDATE queries SET overtime = 1 WHERE sr_number = ?"
+			_, err = db.Exec(sqlQuery, sr_number)
+		}
+	}
 
 	if err != nil {
 		log.Print(err)
@@ -150,24 +164,6 @@ func AddQueryToDB(userId, sr_number, sr_type, sr_result, sr_repeat_result, infor
 
 }
 
-func SaveNote(querydata map[string]string) {
-	db, err := sql.Open("sqlite3", "./goqualityBD.db")
-
-	if err != nil {
-		log.Print(err)
-	}
-
-	defer db.Close()
-
-	var sqlQuery string
-
-	sqlQuery = `INSERT INTO noteHelp (note, additional_actions, how_inform, sr_number) VALUES (?,?,?,?) `
-
-	//log.Println(querydata)
-
-	_, err = db.Exec(sqlQuery, querydata["note"], querydata["additional_actions"], querydata["how_inform"], querydata["sr_number"])
-}
-
 func checkIfQueryExist(sr_number string) bool {
 
 	db, err := sql.Open("sqlite3", "./goqualityBD.db")
@@ -191,6 +187,51 @@ func checkIfQueryExist(sr_number string) bool {
 	}
 
 	return true
+}
+
+func CheckIfUserInOver(user string) bool {
+
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	defer db.Close()
+
+	sqlstmt := `SELECT overtime FROM users WHERE siebel = ? AND overtime = "1"`
+
+	err = db.QueryRow(sqlstmt, user).Scan(&user)
+
+	if err != nil {
+		if err != sql.ErrNoRows {
+			log.Println(err)
+		}
+
+		return false
+	}
+
+	return true
+}
+
+func IneedMoreMoney(user, action string) {
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	defer db.Close()
+
+	var sqlstmt string
+
+	if action == "1" {
+		sqlstmt = `UPDATE users SET overtime = 0 WHERE siebel = ?`
+	} else if action == "0" {
+		sqlstmt = `UPDATE users SET overtime = 1 WHERE siebel = ?`
+	}
+
+	db.Exec(sqlstmt, user)
 }
 
 func GetQueryInfo(sr_number string) ([]byte, error) {
@@ -341,22 +382,5 @@ func SaveLog(inter, logText, userName string) {
 	timeCreate := time.Now().Format("02.01.2006 15:04")
 
 	_, err = db.Exec(querySQL, inter, logText, userName, timeCreate)
-
-}
-
-func GetPhrase(phrase_id string) string {
-	db, err := sql.Open("sqlite3", "./goqualityBD.db")
-
-	if err != nil {
-		log.Print(err)
-	}
-
-	defer db.Close()
-
-	sqlQuery := "SELECT note_text FROM phrases WHERE note_id = ?"
-
-	err = db.QueryRow(sqlQuery, phrase_id).Scan(&phrase_id)
-
-	return phrase_id
 
 }
