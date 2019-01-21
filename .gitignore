@@ -70,3 +70,4 @@ fabric.properties
 .idea/vcs.xml
 
 *.db
+.idea/sonarIssues.xml
