@@ -10,6 +10,7 @@ package auth
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"io/ioutil"
 	"log"
@@ -17,6 +18,7 @@ import (
 	"qualityManagerApi/constants"
 	"qualityManagerApi/models"
 	"qualityManagerApi/tools"
+	"strings"
 	"time"
 )
 
@@ -100,4 +102,33 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		tools.SaveLog("backend", "Login Failed, need logs from server side", "system")
 	}
 
+}
+
+func CheckToken(w http.ResponseWriter, r *http.Request) *models.JWTData {
+	authToken := r.Header.Get("Authorization")
+	authArr := strings.Split(authToken, " ")
+
+	if len(authArr) != 2 {
+		tools.SaveLog("backend", "Authentication header is invalid: "+authToken, "system")
+		http.Error(w, "Request failed!", http.StatusUnauthorized)
+	}
+
+	jwtToken := authArr[1]
+
+	claims, err := jwt.ParseWithClaims(jwtToken, &models.JWTData{}, func(token *jwt.Token) (interface{}, error) {
+		if jwt.SigningMethodHS256 != token.Method {
+			return nil, errors.New("Invalid signing algorithm")
+		}
+		return []byte(constants.SECRET), nil
+	})
+
+	if err != nil {
+		log.Println(err)
+		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
+		http.Error(w, "Request failed!", http.StatusUnauthorized)
+	}
+
+	result := claims.Claims.(*models.JWTData)
+
+	return result
 }

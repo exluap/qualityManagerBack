@@ -15,6 +15,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"qualityManagerApi/auth"
 	"qualityManagerApi/constants"
 	"qualityManagerApi/models"
 	"qualityManagerApi/tools"
@@ -69,30 +70,7 @@ import (
 */
 
 func GetQueries(w http.ResponseWriter, r *http.Request) {
-	authToken := r.Header.Get("Authorization")
-	authArr := strings.Split(authToken, " ")
-
-	if len(authArr) != 2 {
-		tools.SaveLog("backend", "Authentication header is invalid: "+authToken, "system")
-		http.Error(w, "Request failed!", http.StatusUnauthorized)
-	}
-
-	jwtToken := authArr[1]
-
-	claims, err := jwt.ParseWithClaims(jwtToken, &models.JWTData{}, func(token *jwt.Token) (interface{}, error) {
-		if jwt.SigningMethodHS256 != token.Method {
-			return nil, errors.New("Invalid signing algorithm")
-		}
-		return []byte(constants.SECRET), nil
-	})
-
-	if err != nil {
-		log.Println(err)
-		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
-		http.Error(w, "Request failed!", http.StatusUnauthorized)
-	}
-
-	data := claims.Claims.(*models.JWTData)
+	data := auth.CheckToken(w, r)
 
 	userID := data.CustomClaims["userid"]
 
@@ -156,31 +134,13 @@ func GetQueries(w http.ResponseWriter, r *http.Request) {
 
 func AddQuery(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
-	authToken := r.Header.Get("Authorization")
-	authArray := strings.Split(authToken, " ")
 
-	if len(authArray) != 2 {
-		log.Println("Auth header is invalid: " + authToken)
+	data := auth.CheckToken(w, r)
+
+	if err != nil {
 		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
 		http.Error(w, "Request failed!", http.StatusUnauthorized)
 	}
-
-	if err != nil {
-		log.Println(err)
-		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
-		http.Error(w, "Save Query Failed", http.StatusUnauthorized)
-	}
-
-	jwtToken := authArray[1]
-
-	claims, err := jwt.ParseWithClaims(jwtToken, &models.JWTData{}, func(token *jwt.Token) (interface{}, error) {
-		if jwt.SigningMethodHS256 != token.Method {
-			return nil, errors.New("Invalid signing algorithm")
-		}
-		return []byte(constants.SECRET), nil
-	})
-
-	data := claims.Claims.(*models.JWTData)
 
 	var queryData map[string]string
 
@@ -707,8 +667,6 @@ func generateAdditionalAction(queryInfo map[string]string) string {
 }
 
 func DeleteSR(w http.ResponseWriter, r *http.Request) {
-	authToken := r.Header.Get("Authorization")
-	authArr := strings.Split(authToken, " ")
 
 	body, err := ioutil.ReadAll(r.Body)
 
@@ -716,26 +674,12 @@ func DeleteSR(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &requestBody)
 
-	if len(authArr) != 2 {
-		log.Println("Authentication header is invalid: " + authToken)
-		http.Error(w, "Request failed!", http.StatusUnauthorized)
-	}
-
-	jwtToken := authArr[1]
-
-	claims, err := jwt.ParseWithClaims(jwtToken, &models.JWTData{}, func(token *jwt.Token) (interface{}, error) {
-		if jwt.SigningMethodHS256 != token.Method {
-			return nil, errors.New("Invalid signing algorithm")
-		}
-		return []byte(constants.SECRET), nil
-	})
-
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "Request failed!", http.StatusUnauthorized)
 	}
 
-	data := claims.Claims.(*models.JWTData)
+	data := auth.CheckToken(w, r)
 
 	userID := data.CustomClaims["userid"]
 

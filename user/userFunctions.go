@@ -10,16 +10,12 @@ package user
 
 import (
 	"encoding/json"
-	"errors"
 	"flag"
-	"github.com/dgrijalva/jwt-go"
 	"io/ioutil"
 	"log"
 	"net/http"
-	"qualityManagerApi/constants"
-	"qualityManagerApi/models"
+	"qualityManagerApi/auth"
 	"qualityManagerApi/tools"
-	"strings"
 )
 
 /**
@@ -49,23 +45,7 @@ import (
 */
 
 func CheckOver(w http.ResponseWriter, r *http.Request) {
-	authToken := r.Header.Get("Authorization")
-	authArr := strings.Split(authToken, " ")
 	body, err := ioutil.ReadAll(r.Body)
-
-	if len(authArr) != 2 {
-		tools.SaveLog("backend", "Authentication header is invalid: "+authToken, "system")
-		http.Error(w, "Request failed!", http.StatusUnauthorized)
-	}
-
-	jwtToken := authArr[1]
-
-	claims, err := jwt.ParseWithClaims(jwtToken, &models.JWTData{}, func(token *jwt.Token) (interface{}, error) {
-		if jwt.SigningMethodHS256 != token.Method {
-			return nil, errors.New("Invalid signing algorithm")
-		}
-		return []byte(constants.SECRET), nil
-	})
 
 	if err != nil {
 		log.Println(err)
@@ -73,13 +53,13 @@ func CheckOver(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Request failed!", http.StatusUnauthorized)
 	}
 
-	data := claims.Claims.(*models.JWTData)
+	data := auth.CheckToken(w, r)
 
 	userID := data.CustomClaims["userid"]
 
 	var userData map[string]string
 
-	json.Unmarshal(body, &userData)
+	err = json.Unmarshal(body, &userData)
 
 	if userData["action"] == "check" {
 		jsonData := tools.CheckIfUserInOver(userID)
@@ -96,35 +76,19 @@ func CheckOver(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetUserLogin(w http.ResponseWriter, r *http.Request) string {
-	authToken := r.Header.Get("Authorization")
-	authArr := strings.Split(authToken, " ")
 
 	body, err := ioutil.ReadAll(r.Body)
 
 	var requestBody map[string]string
 
-	json.Unmarshal(body, &requestBody)
-
-	if len(authArr) != 2 {
-		log.Println("Authentication header is invalid: " + authToken)
-		http.Error(w, "Request failed!", http.StatusUnauthorized)
-	}
-
-	jwtToken := authArr[1]
-
-	claims, err := jwt.ParseWithClaims(jwtToken, &models.JWTData{}, func(token *jwt.Token) (interface{}, error) {
-		if jwt.SigningMethodHS256 != token.Method {
-			return nil, errors.New("Invalid signing algorithm")
-		}
-		return []byte(constants.SECRET), nil
-	})
+	err = json.Unmarshal(body, &requestBody)
 
 	if err != nil {
 		log.Println(err)
 		http.Error(w, "Request failed!", http.StatusUnauthorized)
 	}
 
-	data := claims.Claims.(*models.JWTData)
+	data := auth.CheckToken(w, r)
 
 	userID := data.CustomClaims["userid"]
 
