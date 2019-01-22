@@ -71,3 +71,4 @@ fabric.properties
 
 *.db
 .idea/sonarIssues.xml
+/apiDoc/
