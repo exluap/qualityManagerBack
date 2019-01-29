@@ -140,3 +140,56 @@ func GetInfoAboutUser(w http.ResponseWriter, r *http.Request) {
 
 	w.Write(showReq)
 }
+
+/**
+@api {post} /api/user/changelogin Change User password
+@apiVersion 1.0.0
+@apiGroup User
+@apiName PostNewLogin
+
+@apiDescription Set new login for user
+
+@apiParam {String} newLogin New login for user
+
+@apiSuccess {json} Success-Response
+	{
+		"Result": "Login changed"
+	}
+
+@apiError Unauthorized Getting Bad Credentials
+
+@apiErrorExample Error-Response
+		"Request failed!"
+*/
+
+func ChangeLogin(w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Request failed!", http.StatusInternalServerError)
+	}
+	data := auth.CheckToken(w, r)
+
+	var changePass map[string]string
+
+	json.Unmarshal(body, &changePass)
+
+	userId := data.CustomClaims["userid"]
+
+	err = tools.ChangeUserLogin(userId, changePass["newLogin"])
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Bad credentials!", http.StatusUnauthorized)
+	} else {
+		res := &models.Resultation{
+			Result: "Login changed",
+		}
+
+		result, _ := json.Marshal(res)
+
+		w.Write(result)
+	}
+
+}

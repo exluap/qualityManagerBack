@@ -33,6 +33,7 @@ func startWebServer() {
 	userGroup := r.PathPrefix("/api/user").Subrouter()
 	userGroup.HandleFunc("/overtime", user.CheckOver)
 	userGroup.HandleFunc("/info", user.GetInfoAboutUser).Methods("GET")
+	userGroup.HandleFunc("/changelogin", user.ChangeLogin).Methods("POST")
 
 	//Query Group
 	queryGroup := r.PathPrefix("/api/query").Subrouter()

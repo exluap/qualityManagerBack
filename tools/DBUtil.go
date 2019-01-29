@@ -402,3 +402,21 @@ func ChangeUserPassword(user, passwordold, newpassword string) error {
 	return err
 
 }
+
+func ChangeUserLogin(oldLogin, newLogin string) error {
+
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	defer db.Close()
+
+	querySql := `UPDATE users SET SIEBEL = ? WHERE SIEBEL = ?`
+
+	_, err = db.Exec(querySql, newLogin, oldLogin)
+
+	return err
+
+}
