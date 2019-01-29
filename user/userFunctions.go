@@ -142,7 +142,7 @@ func GetInfoAboutUser(w http.ResponseWriter, r *http.Request) {
 }
 
 /**
-@api {post} /api/user/changelogin Change User password
+@api {post} /api/user/changelogin Change User login
 @apiVersion 1.0.0
 @apiGroup User
 @apiName PostNewLogin
