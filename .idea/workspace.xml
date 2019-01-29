@@ -2,14 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4bcc6da8-9899-45c9-b4fa-84a83872243a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apiDoc/api_data.js" beforeDir="false" afterPath="$PROJECT_DIR$/apiDoc/api_data.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apiDoc/api_data.json" beforeDir="false" afterPath="$PROJECT_DIR$/apiDoc/api_data.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apiDoc/api_project.js" beforeDir="false" afterPath="$PROJECT_DIR$/apiDoc/api_project.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apiDoc/api_project.json" beforeDir="false" afterPath="$PROJECT_DIR$/apiDoc/api_project.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth/authMain.go" beforeDir="false" afterPath="$PROJECT_DIR$/auth/authMain.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/goqualityBD.db" beforeDir="false" afterPath="$PROJECT_DIR$/goqualityBD.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/models/modelsInfo.go" beforeDir="false" afterPath="$PROJECT_DIR$/models/modelsInfo.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/queries/queriesFunctions.go" beforeDir="false" afterPath="$PROJECT_DIR$/queries/queriesFunctions.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/simpleLogging.go" beforeDir="false" afterPath="$PROJECT_DIR$/tools/simpleLogging.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/userFunctions.go" beforeDir="false" afterPath="$PROJECT_DIR$/user/userFunctions.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/DBUtil.go" beforeDir="false" afterPath="$PROJECT_DIR$/tools/DBUtil.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,7 +30,30 @@
     <option name="HIDDEN_KINDS">
       <set />
     </option>
-    <expand />
+    <expand>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="goqualityBD.db" type="feb32156:DbDataSourceImpl" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="goqualityBD.db" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="goqualityBD.db" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="main: schema" type="981a47c2:SqliteImplModel$Schema" />
+      </path>
+      <path>
+        <item name="Database" type="3277223f:DatabaseStructure$DbRootGroup" />
+        <item name="goqualityBD.db" type="feb32156:DbDataSourceImpl" />
+        <item name="schemas" type="d4e8921:DatabaseStructure$FamilyGroup" />
+        <item name="main: schema" type="981a47c2:SqliteImplModel$Schema" />
+        <item name="users: table" type="3d80ac25:SqliteImplModel$Table" />
+      </path>
+    </expand>
     <select />
   </component>
   <component name="FileEditorManager">
@@ -36,8 +61,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="155">
-              <caret line="34" column="35" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="35" />
+            <state relative-caret-position="570">
+              <caret line="47" column="78" selection-start-line="47" selection-start-column="78" selection-end-line="47" selection-end-column="78" />
             </state>
           </provider>
         </entry>
@@ -45,53 +70,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/queries/queriesFunctions.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-9016">
-              <caret line="86" column="44" selection-start-line="86" selection-start-column="44" selection-end-line="86" selection-end-column="44" />
+            <state relative-caret-position="183">
+              <caret line="706" selection-start-line="706" selection-end-line="706" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/user/userFunctions.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1556">
+              <caret line="117" selection-start-line="117" selection-end-line="117" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/user/userFunctions.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="27">
-              <caret line="53" column="16" lean-forward="true" selection-start-line="53" selection-start-column="16" selection-end-line="53" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tools/simpleLogging.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="76">
-              <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/models/modelsInfo.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="326">
-              <caret line="33" column="13" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tools/DBUtil.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="227" column="22" lean-forward="true" selection-start-line="227" selection-start-column="22" selection-end-line="227" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/auth/authMain.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-499">
-              <caret line="78" column="32" selection-start-line="78" selection-start-column="32" selection-end-line="78" selection-end-column="32" />
+            <state relative-caret-position="239">
+              <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
             </state>
           </provider>
         </entry>
@@ -167,12 +165,12 @@
         <option value="$PROJECT_DIR$/README.MD" />
         <option value="$PROJECT_DIR$/apidoc.json" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/auth/authMain.go" />
         <option value="$PROJECT_DIR$/queries/queriesFunctions.go" />
         <option value="$PROJECT_DIR$/tools/simpleLogging.go" />
         <option value="$PROJECT_DIR$/models/modelsInfo.go" />
-        <option value="$PROJECT_DIR$/tools/DBUtil.go" />
         <option value="$PROJECT_DIR$/user/userFunctions.go" />
+        <option value="$PROJECT_DIR$/tools/DBUtil.go" />
+        <option value="$PROJECT_DIR$/auth/authMain.go" />
         <option value="$PROJECT_DIR$/main.go" />
       </list>
     </option>
@@ -330,7 +328,8 @@
     <MESSAGE value="minified Code, adding ApiDoc for some functions" />
     <MESSAGE value="update gitignore" />
     <MESSAGE value="optimize code" />
-    <option name="LAST_COMMIT_MESSAGE" value="optimize code" />
+    <MESSAGE value="Added new logic and update routing" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added new logic and update routing" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="editorHistoryManager">
@@ -398,52 +397,55 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/auth/authMain.go">
+    <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/db/e7bf5120-8be4-4c47-ab41-fb966c21336f/console.sql">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models/modelsInfo.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-499">
-          <caret line="78" column="32" selection-start-line="78" selection-start-column="32" selection-end-line="78" selection-end-column="32" />
+        <state relative-caret-position="326">
+          <caret line="33" column="14" selection-start-line="33" selection-start-column="14" selection-end-line="33" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tools/simpleLogging.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
-          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/models/modelsInfo.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="33" column="13" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tools/DBUtil.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="227" column="22" lean-forward="true" selection-start-line="227" selection-start-column="22" selection-end-line="227" selection-end-column="22" />
+        <state relative-caret-position="2859">
+          <caret line="387" column="23" selection-start-line="387" selection-start-column="23" selection-end-line="387" selection-end-column="23" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="34" column="35" selection-start-line="34" selection-start-column="35" selection-end-line="34" selection-end-column="35" />
+        <state relative-caret-position="570">
+          <caret line="47" column="78" selection-start-line="47" selection-start-column="78" selection-end-line="47" selection-end-column="78" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/queries/queriesFunctions.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-9016">
-          <caret line="86" column="44" selection-start-line="86" selection-start-column="44" selection-end-line="86" selection-end-column="44" />
+        <state relative-caret-position="183">
+          <caret line="706" selection-start-line="706" selection-end-line="706" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/user/userFunctions.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27">
-          <caret line="53" column="16" lean-forward="true" selection-start-line="53" selection-start-column="16" selection-end-line="53" selection-end-column="16" />
+        <state relative-caret-position="1556">
+          <caret line="117" selection-start-line="117" selection-end-line="117" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/authMain.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="239">
+          <caret line="35" lean-forward="true" selection-start-line="35" selection-end-line="35" />
         </state>
       </provider>
     </entry>

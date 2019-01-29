@@ -27,6 +27,7 @@ import (
 @apiVersion 1.0.0
 @apiName GetToken
 @apiGroup Authentication
+@apiHeader token Auth Token of user with information about him
 
 @apiDescription Get auth Token for use some methods for working
 
@@ -131,4 +132,58 @@ func CheckToken(w http.ResponseWriter, r *http.Request) *models.JWTData {
 	result := claims.Claims.(*models.JWTData)
 
 	return result
+}
+
+/**
+@api {post} /api/auth/changepassword Change User password
+@apiVersion 1.0.0
+@apiGroup Authentication
+@apiName PostNewPassword
+
+@apiDescription Set new password for user
+
+@apiParam {String} passwordOld Old password of user
+@apiParam {String} passwordNew New User password
+
+@apiSuccess {json} Success-Response
+	{
+		"Result": "Password changed"
+	}
+
+@apiError Unauthorized Getting Bad Credentials
+
+@apiErrorExample Error-Response
+		"Request failed!"
+*/
+
+func ChangePassword(w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Request failed!", http.StatusInternalServerError)
+	}
+	data := CheckToken(w, r)
+
+	var changePass map[string]string
+
+	json.Unmarshal(body, &changePass)
+
+	userId := data.CustomClaims["userid"]
+
+	err = tools.ChangeUserPassword(userId, changePass["passwordOld"], changePass["passwordNew"])
+
+	if err != nil {
+		log.Println(err)
+		http.Error(w, "Bad credentials!", http.StatusUnauthorized)
+	} else {
+		res := &models.Resultation{
+			Result: "Password changed",
+		}
+
+		result, _ := json.Marshal(res)
+
+		w.Write(result)
+	}
+
 }

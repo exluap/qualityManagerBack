@@ -384,3 +384,21 @@ func SaveLog(inter, logText, userName string) {
 	_, err = db.Exec(querySQL, inter, logText, userName, timeCreate)
 
 }
+
+func ChangeUserPassword(user, passwordold, newpassword string) error {
+
+	db, err := sql.Open("sqlite3", "./goqualityBD.db")
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	defer db.Close()
+
+	querySql := `UPDATE users SET PASS = ? WHERE SIEBEL = ? AND PASS = ?`
+
+	_, err = db.Exec(querySql, newpassword, user, passwordold)
+
+	return err
+
+}
