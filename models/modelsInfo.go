@@ -24,3 +24,12 @@ type JWTData struct {
 	jwt.StandardClaims
 	CustomClaims map[string]string `json:"custom,omitempty"`
 }
+
+type Query struct {
+	Range []string `json:"range"`
+}
+
+type User struct {
+	Login string
+	Over  bool
+}

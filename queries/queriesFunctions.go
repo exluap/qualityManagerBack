@@ -24,7 +24,7 @@ import (
 )
 
 /**
-@api {get} /get_queries Getting today records
+@api {get} /api/query/queries Getting today records
 @apiVersion 1.0.0
 @apiName GetQueryOfUser
 @apiGroup Queries
@@ -70,25 +70,58 @@ import (
 */
 
 func GetQueries(w http.ResponseWriter, r *http.Request) {
-	data := auth.CheckToken(w, r)
+	authToken := r.Header.Get("Authorization")
+	authArr := strings.Split(authToken, " ")
+
+	if len(authArr) != 2 {
+		tools.SaveLog("backend", "Authentication header is invalid: "+authToken, "system")
+		http.Error(w, "Request fai1led!", http.StatusUnauthorized)
+	}
+
+	jwtToken := authArr[1]
+
+	claims, err := jwt.ParseWithClaims(jwtToken, &models.JWTData{}, func(token *jwt.Token) (interface{}, error) {
+		if jwt.SigningMethodHS256 != token.Method {
+			return nil, errors.New("Invalid signing algorithm")
+		}
+		return []byte(constants.SECRET), nil
+	})
+
+	if err != nil {
+		log.Println(err)
+		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
+		http.Error(w, "Request fail2ed!", http.StatusUnauthorized)
+	}
+
+	data := claims.Claims.(*models.JWTData)
+	//body, err := ioutil.ReadAll(r.Body)
 
 	userID := data.CustomClaims["userid"]
 
 	jsonData, err := tools.UserQueries(userID)
 
+	//var query models.Query
+
+	//err = json.Unmarshal(body, query)
+
+	//log.Print(query.Range)
+
 	if err != nil {
-		log.Println(err)
-		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
 		http.Error(w, "Request failed!", http.StatusUnauthorized)
+	} else {
+		tools.SaveLog("backend", "User request queries list: "+string(jsonData), user.GetUserLogin(w, r))
 	}
 
-	tools.SaveLog("backend", "User request queries list: "+string(jsonData), user.GetUserLogin(w, r))
+	_, err = w.Write(jsonData)
 
-	w.Write(jsonData)
+	if err != nil {
+		http.Error(w, "Help", http.StatusUnauthorized)
+	}
+
 }
 
 /**
-@api {post} /add_query Adding new record
+@api {post} /api/query/add Adding new record
 @apiVersion 1.0.0
 @apiName AddQuery
 @apiGroup Queries
@@ -139,7 +172,7 @@ func AddQuery(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
-		http.Error(w, "Request failed!", http.StatusUnauthorized)
+		http.Error(w, "Request failed!", http.StatusInternalServerError)
 	}
 
 	var queryData map[string]string
@@ -162,7 +195,7 @@ func AddQuery(w http.ResponseWriter, r *http.Request) {
 }
 
 /**
-@api {get} /get_query Getting record info
+@api {get} /api/query/info Getting record info
 @apiName GetQuery
 @apiVersion 1.0.0
 @apiGroup Queries
@@ -253,7 +286,7 @@ func GetQuery(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
-		http.Error(w, "Request failed!", http.StatusUnauthorized)
+		http.Error(w, "Request failed!", http.StatusInternalServerError)
 	}
 
 	w.Write(jsonData)
@@ -263,7 +296,7 @@ func GetQuery(w http.ResponseWriter, r *http.Request) {
 }
 
 /**
-@api {post} /generate_note_and_instruction Generate Note text and get instructions
+@api {post} /api/query/helper Generate Note text and get instructions
 @apiName GetInstructions
 @apiVersion 1.0.0
 @apiGroup Queries
@@ -665,6 +698,31 @@ func generateAdditionalAction(queryInfo map[string]string) string {
 
 	return result
 }
+
+/**
+@api {post} /api/query/delete Delete record from list
+@apiName PostDeleteSR
+@apiVersion 1.0.0
+@apiGroup Queries
+
+@apiHeader token Auth Token of user with information about him
+
+@apiDescription Delete record about SR from list
+
+@apiParam {String} sr_number SR value in list
+
+@apiSuccessExample {json} Success-Response
+	Delete
+
+@apiError Unauthorized Getting Bad Credentials
+
+@apiErrorExample Error-Response
+		"Request failed!"
+
+@apiError Can't delete SR
+@apiErrorExample Error-Response (delete)
+	"Huston we have a problem. See a log!"
+*/
 
 func DeleteSR(w http.ResponseWriter, r *http.Request) {
 

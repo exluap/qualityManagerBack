@@ -10,13 +10,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/rs/cors"
+	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 	"qualityManagerApi/auth"
 	"qualityManagerApi/constants"
 	"qualityManagerApi/queries"
-	"qualityManagerApi/tools"
 	"qualityManagerApi/user"
 )
 
@@ -27,22 +26,30 @@ func main() {
 }
 
 func startWebServer() {
-	mux := http.NewServeMux()
+	r := mux.NewRouter()
+	r.HandleFunc("/", hello)
 
-	mux.HandleFunc("/", hello)
-	mux.HandleFunc("/login", auth.Login)
-	mux.HandleFunc("/get_query", queries.GetQuery)
-	mux.HandleFunc("/add_query", queries.AddQuery)
-	mux.HandleFunc("/get_queries", queries.GetQueries)
-	mux.HandleFunc("/generate_note_and_instruction", queries.GenerateNote)
-	mux.HandleFunc("/delete_sr", queries.DeleteSR)
-	mux.HandleFunc("/add_log", tools.AddingLog)
-	mux.HandleFunc("/in_over", user.CheckOver)
+	//User Group
+	userGroup := r.PathPrefix("/api/user").Subrouter()
+	userGroup.HandleFunc("/overtime", user.CheckOver)
+	userGroup.HandleFunc("/info", user.GetInfoAboutUser).Methods("GET")
 
-	handler := cors.AllowAll().Handler(mux)
+	//Query Group
+	queryGroup := r.PathPrefix("/api/query").Subrouter()
+	queryGroup.HandleFunc("/info", queries.GetQuery).Methods("GET")
+	queryGroup.HandleFunc("/list", queries.GetQueries).Methods("GET")
+	queryGroup.HandleFunc("/add", queries.AddQuery).Methods("POST")
+	queryGroup.HandleFunc("/delete", queries.DeleteSR).Methods("POST")
+	queryGroup.HandleFunc("/helper", queries.GenerateNote).Methods("POST")
+
+	//Auth Group
+	authGroup := r.PathPrefix("/api/auth").Subrouter()
+	authGroup.HandleFunc("/login", auth.Login).Methods("GET")
+
+	//r.HandleFunc("/add_log", tools.AddingLog)
 
 	log.Println("Listening for connections on port: ", constants.PORT)
-	log.Fatal(http.ListenAndServe(":"+constants.PORT, handler))
+	log.Fatal(http.ListenAndServe(":"+constants.PORT, r))
 
 }
 

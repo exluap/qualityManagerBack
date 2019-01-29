@@ -15,11 +15,12 @@ import (
 	"log"
 	"net/http"
 	"qualityManagerApi/auth"
+	"qualityManagerApi/models"
 	"qualityManagerApi/tools"
 )
 
 /**
-@api {post} /in_over Checking overtime or set it
+@api {get} /api/user/overtime Checking overtime or set it
 @apiName PostOver
 @apiVersion 1.0.0
 @apiGroup User
@@ -27,16 +28,11 @@ import (
 
 @apiDescription Getting info about overtime or set it as u need
 
-@apiParam {String} overtime Result of overtime. 1 - is active, 0 - is inactive
-@apiParam {String} action What r u need? "check" - checking if user in overtime or "update" - set overtime as !overtime
 
-
-@apiSuccess {String} Result result of action
-
-@apiSuccessExample {json} Success-Response (check action)
-	true
 @apiSuccessExample {json} Success-Response (set overtime)
-	Ok
+	{
+		"Result": "Overtime changed"
+	}
 
 @apiError Unauthorized Getting Bad Credentials
 
@@ -45,33 +41,28 @@ import (
 */
 
 func CheckOver(w http.ResponseWriter, r *http.Request) {
-	body, err := ioutil.ReadAll(r.Body)
-
-	if err != nil {
-		log.Println(err)
-		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
-		http.Error(w, "Request failed!", http.StatusUnauthorized)
-	}
 
 	data := auth.CheckToken(w, r)
 
 	userID := data.CustomClaims["userid"]
 
-	var userData map[string]string
+	var id string
 
-	err = json.Unmarshal(body, &userData)
-
-	if userData["action"] == "check" {
-		jsonData := tools.CheckIfUserInOver(userID)
-
-		jsonResult, _ := json.Marshal(jsonData)
-
-		w.Write(jsonResult)
-	} else if userData["action"] == "update" {
-		tools.IneedMoreMoney(userID, userData["overtime"])
-		jsonResult, _ := json.Marshal("Ok")
-		w.Write(jsonResult)
+	if tools.CheckIfUserInOver(userID) {
+		id = "1"
+	} else {
+		id = "0"
 	}
+
+	tools.IneedMoreMoney(userID, id)
+
+	res := &models.Resultation{
+		Result: "Overtime changed",
+	}
+
+	jsonResult, _ := json.Marshal(res)
+
+	w.Write(jsonResult)
 
 }
 
@@ -111,4 +102,41 @@ func makeNewUser(firstName, lastName, middleName string) {
 		log.Println("User is exist")
 	}
 
+}
+
+/**
+@api {get} /api/user/info Getting info about user
+@apiName GetUserInfo
+@apiVersion 1.0.0
+@apiGroup User
+@apiHeader token Auth Token of user with information about him
+
+
+@apiDescription Getting info about user
+
+@apiSuccess {String} Login Return User Login
+
+@apiSuccessExample {json} Success-Response
+	{
+		"Login": "USERTEST"
+	}
+
+@apiError Unauthorized Getting Bad Credentials
+
+@apiErrorExample Error-Response
+		"Request failed!"
+
+*/
+
+func GetInfoAboutUser(w http.ResponseWriter, r *http.Request) {
+	data := GetUserLogin(w, r)
+
+	res := &models.User{
+		Login: data,
+		Over:  tools.CheckIfUserInOver(data),
+	}
+
+	showReq, _ := json.Marshal(res)
+
+	w.Write(showReq)
 }

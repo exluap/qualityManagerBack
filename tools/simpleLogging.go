@@ -20,28 +20,6 @@ import (
 	"strings"
 )
 
-/**
-@api {post} /add_log Adding log record
-@apiName PostLogInfo
-@apiVersion 1.0.0
-@apiGroup Logging
-@apiHeader token Auth Token of user with information about him
-
-@apiDescription For looking log about of actions by user need saving it
-
-@apiParam {String} inter Interface of getting log
-@apiParam {String} infoText Text who's need add for this log record
-
-@apiSuccess {String} Result Result of saving logs
-@apiSuccessExample {json} Success-Response:
-	"Log is saved"
-
-@apiError Unauthorized Getting Bad Credentials
-
-@apiErrorExample Error-Response:
-		"Request failed!"
-
-*/
 func AddingLog(w http.ResponseWriter, r *http.Request) {
 	authToken := r.Header.Get("Authorization")
 	authArr := strings.Split(authToken, " ")

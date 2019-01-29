@@ -23,7 +23,7 @@ import (
 )
 
 /**
-@api {get} /login Getting auth token
+@api {get} /api/auth/login Getting auth token
 @apiVersion 1.0.0
 @apiName GetToken
 @apiGroup Authentication
