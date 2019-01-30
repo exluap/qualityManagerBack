@@ -45,7 +45,7 @@ func startWebServer() {
 
 	//Auth Group
 	authGroup := r.PathPrefix("/api/auth").Subrouter()
-	authGroup.HandleFunc("/login", auth.Login).Methods("GET")
+	authGroup.HandleFunc("/login", auth.Login).Methods("POST")
 	authGroup.HandleFunc("/changepassword", auth.ChangePassword).Methods("POST")
 
 	//r.HandleFunc("/add_log", tools.AddingLog)
