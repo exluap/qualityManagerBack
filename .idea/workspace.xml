@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4bcc6da8-9899-45c9-b4fa-84a83872243a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/goqualityBD.db" beforeDir="false" afterPath="$PROJECT_DIR$/goqualityBD.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/goqualityBD.db" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -50,11 +50,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="197">
-              <caret line="35" column="67" selection-start-line="35" selection-start-column="67" selection-end-line="35" selection-end-column="67" />
+            <state relative-caret-position="377">
+              <caret line="47" column="62" selection-start-line="47" selection-start-column="62" selection-end-line="47" selection-end-column="62" />
             </state>
           </provider>
         </entry>
@@ -62,7 +62,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/queries/queriesFunctions.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10395">
+            <state relative-caret-position="632">
               <caret line="706" selection-start-line="706" selection-end-line="706" />
             </state>
           </provider>
@@ -80,17 +80,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tools/DBUtil.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6180">
+            <state relative-caret-position="632">
               <caret line="419" column="14" selection-start-line="419" selection-start-column="14" selection-end-line="419" selection-end-column="14" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/auth/authMain.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2655">
-              <caret line="189" selection-start-line="136" selection-end-line="189" />
+            <state relative-caret-position="341">
+              <caret line="189" selection-start-line="189" selection-end-line="189" />
             </state>
           </provider>
         </entry>
@@ -169,10 +169,10 @@
         <option value="$PROJECT_DIR$/queries/queriesFunctions.go" />
         <option value="$PROJECT_DIR$/tools/simpleLogging.go" />
         <option value="$PROJECT_DIR$/models/modelsInfo.go" />
-        <option value="$PROJECT_DIR$/auth/authMain.go" />
         <option value="$PROJECT_DIR$/tools/DBUtil.go" />
-        <option value="$PROJECT_DIR$/main.go" />
         <option value="$PROJECT_DIR$/user/userFunctions.go" />
+        <option value="$PROJECT_DIR$/main.go" />
+        <option value="$PROJECT_DIR$/auth/authMain.go" />
       </list>
     </option>
   </component>
@@ -247,8 +247,9 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="goland.project.structure" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.ide.settings.web.browsers" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -269,7 +270,20 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Go Build.Build">
+    <configuration name="Build" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="qualityManagerApi" />
+      <working_directory value="$PROJECT_DIR$/" />
+      <go_parameters value="-i" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/main.go" />
+      <package value="qualityManagerApi" />
+      <directory value="$PROJECT_DIR$/" />
+      <option name="run" value="false" />
+      <method v="2">
+        <option name="GoBeforeRunTask" />
+      </method>
+    </configuration>
     <configuration name="Unnamed" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="qualityManagerApi" />
       <working_directory value="$PROJECT_DIR$/" />
@@ -280,12 +294,15 @@
       <directory value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Go Build.Unnamed" />
+      <item itemvalue="Go Build.Build" />
+    </list>
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="26" width="1440" height="801" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49789914" visible="true" weight="0.36337626" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49789914" visible="true" weight="0.3683834" />
       <window_info id="Structure" order="1" sideWeight="0.5021008" side_tool="true" weight="0.2494577" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -298,8 +315,8 @@
       <window_info anchor="bottom" id="Database Console" order="7" weight="0.32863188" />
       <window_info anchor="bottom" id="Database Changes" order="8" weight="0.32863188" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49963847" weight="0.32863188" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4989154" weight="0.325811" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5010846" side_tool="true" weight="0.32863188" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49785408" visible="true" weight="0.325811" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50214595" side_tool="true" weight="0.325811" />
       <window_info anchor="bottom" id="Messages" order="12" visible="true" weight="0.32863188" />
       <window_info anchor="bottom" id="SonarQube" order="13" weight="0.32863188" />
       <window_info anchor="bottom" id="REST Client" order="14" weight="0.42595205" />
@@ -334,7 +351,8 @@
     <MESSAGE value="Added change password func and added route for it" />
     <MESSAGE value="Added function for change login of user" />
     <MESSAGE value="fix grammar" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix grammar" />
+    <MESSAGE value="fix login route" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix login route" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="editorHistoryManager">
@@ -419,24 +437,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="377">
+          <caret line="47" column="62" selection-start-line="47" selection-start-column="62" selection-end-line="47" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/queries/queriesFunctions.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10395">
+        <state relative-caret-position="632">
           <caret line="706" selection-start-line="706" selection-end-line="706" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tools/DBUtil.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6180">
-          <caret line="419" column="14" selection-start-line="419" selection-start-column="14" selection-end-line="419" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/auth/authMain.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2655">
-          <caret line="189" selection-start-line="136" selection-end-line="189" />
         </state>
       </provider>
     </entry>
@@ -447,10 +458,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.go">
+    <entry file="file://$PROJECT_DIR$/tools/DBUtil.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="35" column="67" selection-start-line="35" selection-start-column="67" selection-end-line="35" selection-end-column="67" />
+        <state relative-caret-position="632">
+          <caret line="419" column="14" selection-start-line="419" selection-start-column="14" selection-end-line="419" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/authMain.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="189" selection-start-line="189" selection-end-line="189" />
         </state>
       </provider>
     </entry>
