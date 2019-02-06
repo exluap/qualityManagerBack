@@ -10,6 +10,7 @@ package user
 
 import (
 	"encoding/json"
+	"errors"
 	"flag"
 	"io/ioutil"
 	"log"
@@ -68,16 +69,11 @@ func CheckOver(w http.ResponseWriter, r *http.Request) {
 
 func GetUserLogin(w http.ResponseWriter, r *http.Request) string {
 
-	body, err := ioutil.ReadAll(r.Body)
+	body, _ := ioutil.ReadAll(r.Body)
 
 	var requestBody map[string]string
 
-	err = json.Unmarshal(body, &requestBody)
-
-	if err != nil {
-		log.Println(err)
-		http.Error(w, "Request failed!", http.StatusUnauthorized)
-	}
+	json.Unmarshal(body, &requestBody)
 
 	data := auth.CheckToken(w, r)
 
@@ -177,11 +173,15 @@ func ChangeLogin(w http.ResponseWriter, r *http.Request) {
 
 	userId := data.CustomClaims["userid"]
 
-	err = tools.ChangeUserLogin(userId, changePass["newLogin"])
+	if !tools.CheckIfExistRegister(userId) {
+		err = errors.New("User is exist")
+	} else {
+		err = tools.ChangeUserLogin(userId, changePass["newLogin"])
+	}
 
 	if err != nil {
 		log.Println(err)
-		http.Error(w, "Bad credentials!", http.StatusUnauthorized)
+		http.Error(w, "Bad credentials! User is exist", http.StatusBadRequest)
 	} else {
 		res := &models.Resultation{
 			Result: "Login changed",

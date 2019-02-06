@@ -12,6 +12,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/getsentry/raven-go"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -50,12 +51,14 @@ import (
 */
 
 func Login(w http.ResponseWriter, r *http.Request) {
+
+	//w.Header().Set("Access-Control-Allow-Origin", "*")
 	//selfupdate.EnableLog()
 	body, err := ioutil.ReadAll(r.Body)
 
 	if err != nil {
 		log.Println(err)
-		tools.SaveLog("backend", "Login Failed, need logs from server side", "system")
+		raven.CaptureErrorAndWait(err, nil)
 		http.Error(w, "Login Failed", http.StatusUnauthorized)
 	}
 
@@ -64,7 +67,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	json.Unmarshal(body, &userData)
 
 	log.Println("try auth user: " + userData["login"])
-	tools.SaveLog("backend", "try auth user: "+userData["login"], "system")
 
 	if tools.CheckIfUserExist(userData["login"], userData["pass"]) {
 		claims := models.JWTData{
@@ -81,7 +83,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		tokenString, err := token.SignedString([]byte(constants.SECRET))
 		if err != nil {
 			log.Println(err)
-			tools.SaveLog("backend", "Login Failed, need logs from server side", "system")
 			http.Error(w, "Login failed!", http.StatusUnauthorized)
 		}
 
@@ -93,14 +94,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 		if err != nil {
 			log.Println(err)
-			tools.SaveLog("backend", "Login Failed, need logs from server side", "system")
+			raven.CaptureErrorAndWait(err, nil)
 			http.Error(w, "Login failed!", http.StatusUnauthorized)
 		}
 
 		w.Write(json)
 	} else {
 		http.Error(w, "Login failed!", http.StatusUnauthorized)
-		tools.SaveLog("backend", "Login Failed, need logs from server side", "system")
 	}
 
 }
@@ -110,7 +110,6 @@ func CheckToken(w http.ResponseWriter, r *http.Request) *models.JWTData {
 	authArr := strings.Split(authToken, " ")
 
 	if len(authArr) != 2 {
-		tools.SaveLog("backend", "Authentication header is invalid: "+authToken, "system")
 		http.Error(w, "Request failed!", http.StatusUnauthorized)
 	}
 
@@ -124,8 +123,8 @@ func CheckToken(w http.ResponseWriter, r *http.Request) *models.JWTData {
 	})
 
 	if err != nil {
+		raven.CaptureErrorAndWait(err, nil)
 		log.Println(err)
-		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
 		http.Error(w, "Request failed!", http.StatusUnauthorized)
 	}
 
@@ -145,7 +144,7 @@ func CheckToken(w http.ResponseWriter, r *http.Request) *models.JWTData {
 @apiParam {String} passwordOld Old password of user
 @apiParam {String} passwordNew New User password
 
-@apiSuccess {json} Success-Response
+@apiSuccessExample {json} Success-Response
 	{
 		"Result": "Password changed"
 	}
@@ -160,6 +159,7 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 
 	if err != nil {
+		raven.CaptureErrorAndWait(err, nil)
 		log.Println(err)
 		http.Error(w, "Request failed!", http.StatusInternalServerError)
 	}
@@ -171,9 +171,14 @@ func ChangePassword(w http.ResponseWriter, r *http.Request) {
 
 	userId := data.CustomClaims["userid"]
 
-	err = tools.ChangeUserPassword(userId, changePass["passwordOld"], changePass["passwordNew"])
+	if changePass["passwordOld"] != "" && changePass["passwordNew"] != "" {
+		err = tools.ChangeUserPassword(userId, changePass["passwordOld"], changePass["passwordNew"])
+	} else {
+		err = errors.New("Not enough info")
+	}
 
 	if err != nil {
+		raven.CaptureErrorAndWait(err, nil)
 		log.Println(err)
 		http.Error(w, "Bad credentials!", http.StatusUnauthorized)
 	} else {

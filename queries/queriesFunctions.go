@@ -12,6 +12,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/getsentry/raven-go"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -19,7 +20,6 @@ import (
 	"qualityManagerApi/constants"
 	"qualityManagerApi/models"
 	"qualityManagerApi/tools"
-	"qualityManagerApi/user"
 	"strings"
 )
 
@@ -70,52 +70,19 @@ import (
 */
 
 func GetQueries(w http.ResponseWriter, r *http.Request) {
-	authToken := r.Header.Get("Authorization")
-	authArr := strings.Split(authToken, " ")
 
-	if len(authArr) != 2 {
-		tools.SaveLog("backend", "Authentication header is invalid: "+authToken, "system")
-		http.Error(w, "Request fai1led!", http.StatusUnauthorized)
-	}
-
-	jwtToken := authArr[1]
-
-	claims, err := jwt.ParseWithClaims(jwtToken, &models.JWTData{}, func(token *jwt.Token) (interface{}, error) {
-		if jwt.SigningMethodHS256 != token.Method {
-			return nil, errors.New("Invalid signing algorithm")
-		}
-		return []byte(constants.SECRET), nil
-	})
-
-	if err != nil {
-		log.Println(err)
-		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
-		http.Error(w, "Request fail2ed!", http.StatusUnauthorized)
-	}
-
-	data := claims.Claims.(*models.JWTData)
-	//body, err := ioutil.ReadAll(r.Body)
+	data := auth.CheckToken(w, r)
 
 	userID := data.CustomClaims["userid"]
 
 	jsonData, err := tools.UserQueries(userID)
 
-	//var query models.Query
-
-	//err = json.Unmarshal(body, query)
-
-	//log.Print(query.Range)
-
-	if err != nil {
-		http.Error(w, "Request failed!", http.StatusUnauthorized)
-	} else {
-		tools.SaveLog("backend", "User request queries list: "+string(jsonData), user.GetUserLogin(w, r))
-	}
-
 	_, err = w.Write(jsonData)
 
 	if err != nil {
-		http.Error(w, "Help", http.StatusUnauthorized)
+		log.Print("Auth error: ", err)
+		raven.CaptureErrorAndWait(err, nil)
+		http.Error(w, "Request is bad", http.StatusBadRequest)
 	}
 
 }
@@ -171,7 +138,6 @@ func AddQuery(w http.ResponseWriter, r *http.Request) {
 	data := auth.CheckToken(w, r)
 
 	if err != nil {
-		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
 		http.Error(w, "Request failed!", http.StatusInternalServerError)
 	}
 
@@ -185,9 +151,7 @@ func AddQuery(w http.ResponseWriter, r *http.Request) {
 		Result: "ok",
 	}
 
-	logi, err := json.Marshal(queryData)
-
-	tools.SaveLog("backend", "Saved query: "+string(logi), user.GetUserLogin(w, r))
+	_, err = json.Marshal(queryData)
 
 	showResponse, _ := json.Marshal(res)
 
@@ -285,13 +249,10 @@ func GetQuery(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Println(err)
-		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
 		http.Error(w, "Request failed!", http.StatusInternalServerError)
 	}
 
 	w.Write(jsonData)
-
-	tools.SaveLog("backend", "User response for getQuery: "+string(jsonData), user.GetUserLogin(w, r))
 
 }
 
@@ -486,7 +447,6 @@ func GenerateNote(w http.ResponseWriter, r *http.Request) {
 	authArr := strings.Split(authToken, " ")
 
 	if len(authArr) != 2 {
-		tools.SaveLog("backend", "Authentication header is invalid: "+authToken, "system")
 		http.Error(w, "Request failed!", http.StatusUnauthorized)
 	}
 
@@ -501,7 +461,6 @@ func GenerateNote(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		log.Println(err)
-		tools.SaveLog("backend", "Failed Request! Need logs from user", "system")
 		http.Error(w, "Request failed!", http.StatusUnauthorized)
 	}
 
@@ -528,8 +487,6 @@ func GenerateNote(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-
-	tools.SaveLog("backend", "User response for generate Note Full: "+string(showResponse), user.GetUserLogin(w, r))
 
 	w.Write([]byte(showResponse))
 }
@@ -755,7 +712,5 @@ func DeleteSR(w http.ResponseWriter, r *http.Request) {
 		log.Println("NOT Deleted SR PANIC" + requestBody["sr_body"])
 		w.Write([]byte("Huston we have a problem. See a log!"))
 	}
-
-	tools.SaveLog("backend", "User delete SR: "+requestBody["sr_number"], userID)
 
 }
