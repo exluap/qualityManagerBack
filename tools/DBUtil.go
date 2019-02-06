@@ -16,15 +16,21 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"math/rand"
+	"os"
 	"time"
 )
 
 func connectToDb() (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", "./goqualityBD.db")
+	var db *sql.DB
+	var err error
+	if _, err := os.Stat("./goqualityBD.db"); err == nil {
+		db, err = sql.Open("sqlite3", "./goqualityBD.db")
 
-	if err != nil {
-		log.Print(err)
+	} else {
+
 		raven.CaptureErrorAndWait(err, nil)
+		log.Print(err)
+
 	}
 
 	//defer db.Close()

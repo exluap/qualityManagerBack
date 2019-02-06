@@ -24,6 +24,8 @@ import (
 func init() {
 	err := raven.SetDSN("https://b65f1572d92948cfbd2c5a2bb3e4adc2:1ca4a46c2c7f408fbaf655de030a0e4f@log.exluap.com/2")
 
+	raven.SetRelease("4.0.0")
+
 	if err != nil {
 		log.Print(err)
 	}
