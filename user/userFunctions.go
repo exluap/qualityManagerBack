@@ -111,10 +111,12 @@ func makeNewUser(firstName, lastName, middleName string) {
 @apiDescription Getting info about user
 
 @apiSuccess {String} Login Return User Login
+@apiSuccess {Boolean} Overtime Return user status
 
 @apiSuccessExample {json} Success-Response
 	{
-		"Login": "USERTEST"
+		"Login": "USERTEST",
+		"Over": true
 	}
 
 @apiError Unauthorized Getting Bad Credentials

@@ -24,7 +24,7 @@ import (
 )
 
 /**
-@api {get} /api/query/queries Getting today records
+@api {get} /api/query/list Getting today records
 @apiVersion 1.0.0
 @apiName GetQueryOfUser
 @apiGroup Queries
