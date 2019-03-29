@@ -152,7 +152,7 @@ func PostNewTaskStatus(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Print("Cant update task status")
 		raven.CaptureErrorAndWait(err, nil)
-		http.Error(w, "Some problems with query:", http.StatusBadRequest)
+		http.Error(w, "Some problems with query", http.StatusBadRequest)
 	}
 }
 
