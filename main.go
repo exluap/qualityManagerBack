@@ -15,11 +15,15 @@ import (
 	"github.com/rs/cors"
 	"log"
 	"net/http"
+	"qualityManagerApi/adminTools"
 	"qualityManagerApi/auth"
 	"qualityManagerApi/constants"
 	"qualityManagerApi/queries"
+	"qualityManagerApi/tasks"
 	"qualityManagerApi/user"
 )
+
+const version = "5.0.0"
 
 func init() {
 	err := raven.SetDSN("https://b65f1572d92948cfbd2c5a2bb3e4adc2:1ca4a46c2c7f408fbaf655de030a0e4f@log.exluap.com/2")
@@ -56,7 +60,7 @@ func startWebServer() {
 	//Query Group
 	queryGroup := r.PathPrefix("/api/query").Subrouter()
 	queryGroup.HandleFunc("/info", raven.RecoveryHandler(queries.GetQuery)).Methods("POST")
-	queryGroup.HandleFunc("/list", raven.RecoveryHandler(queries.GetQueries)).Methods("GET")
+	queryGroup.HandleFunc("/list", raven.RecoveryHandler(queries.GetQueries)).Methods("POST")
 	queryGroup.HandleFunc("/add", raven.RecoveryHandler(queries.AddQuery)).Methods("POST")
 	queryGroup.HandleFunc("/delete", raven.RecoveryHandler(queries.DeleteSR)).Methods("POST")
 	queryGroup.HandleFunc("/helper", raven.RecoveryHandler(queries.GenerateNote)).Methods("POST")
@@ -66,8 +70,25 @@ func startWebServer() {
 	authGroup.HandleFunc("/login", raven.RecoveryHandler(auth.Login)).Methods("POST")
 	authGroup.HandleFunc("/changepassword", raven.RecoveryHandler(auth.ChangePassword)).Methods("POST")
 
+	//Admin Func
+
+	adminGroup := r.PathPrefix("/api/admin").Subrouter()
+	adminGroup.HandleFunc("/createNewUser", raven.RecoveryHandler(adminTools.CreateNewUser)).Methods("POST")
+	adminGroup.HandleFunc("/updateUserInfo", raven.RecoveryHandler(adminTools.UpdateUser)).Methods("POST")
+
+	//Tasks Group
+
+	tasksGroup := r.PathPrefix("/api/tasks").Subrouter()
+	tasksGroup.HandleFunc("/list", tasks.GetAllTasks).Methods("GET")
+	tasksGroup.HandleFunc("/{user}/owner", tasks.GetTasksByUserOwner).Methods("GET")
+	tasksGroup.HandleFunc("/{user}/assignee", tasks.GetTasksByUserAssignee).Methods("GET")
+	tasksGroup.HandleFunc("/createNewTask", tasks.PostNewTask).Methods("POST")
+	tasksGroup.HandleFunc("/{taskId}/info", tasks.GetTaskInfo).Methods("GET")
+	tasksGroup.HandleFunc("/{taskId}/statusUpdate", tasks.PostNewTaskStatus).Methods("POST")
+
 	//r.HandleFunc("/add_log", tools.AddingLog)
 
+	log.Println("Current version:", version)
 	log.Println("Listening for connections on port: ", constants.PORT)
 	log.Fatal(http.ListenAndServe(":"+constants.PORT, c.Handler(r)))
 

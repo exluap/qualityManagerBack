@@ -24,12 +24,14 @@ import (
 )
 
 /**
-@api {get} /api/query/list Getting today records
+@api {post} /api/query/list Getting today records
 @apiVersion 1.0.0
 @apiName GetQueryOfUser
 @apiGroup Queries
 @apiHeader token Auth Token of user with information about him
 
+@apiParam {String} start Start date with format YYYY-mm-dd hh:mm:ss
+@apiParam {String} end End date with format as start
 
 @apiDescription Getting today queries of user
 
@@ -70,19 +72,38 @@ import (
 */
 
 func GetQueries(w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadAll(r.Body)
 
 	data := auth.CheckToken(w, r)
 
+	var queryData map[string]string
+
+	json.Unmarshal(body, &queryData)
+
 	userID := data.CustomClaims["userid"]
 
-	jsonData, err := tools.UserQueries(userID)
+	jsonData, err := tools.UserQueries(userID, queryData["start"], queryData["end"])
 
-	_, err = w.Write(jsonData)
+	if queryData["start"] == "" && queryData["end"] == "" {
+		res := &models.Resultation{
+			Result: "Not set range. Cant get queries",
+		}
 
-	if err != nil {
-		log.Print("Auth error: ", err)
-		raven.CaptureErrorAndWait(err, nil)
-		http.Error(w, "Request is bad", http.StatusBadRequest)
+		_, err = json.Marshal(res)
+
+		if err != nil {
+			log.Print("Error with get queries list")
+			raven.CaptureErrorAndWait(err, nil)
+			http.Error(w, "Not set range. Cant get queries", http.StatusBadRequest)
+		}
+	} else {
+		_, err = w.Write(jsonData)
+
+		if err != nil {
+			log.Print("Auth error: ", err)
+			raven.CaptureErrorAndWait(err, nil)
+			http.Error(w, "Request is bad", http.StatusBadRequest)
+		}
 	}
 
 }
@@ -145,7 +166,7 @@ func AddQuery(w http.ResponseWriter, r *http.Request) {
 
 	json.Unmarshal(body, &queryData)
 
-	tools.AddQueryToDB(data.CustomClaims["userid"], queryData["sr_number"], queryData["sr_type"], queryData["sr_result"], queryData["sr_repeat_result"], queryData["inform"], queryData["no_records"], queryData["no_records_only"], queryData["expenditure"], queryData["more_thing"], queryData["exp_claim"], queryData["fin_korr"], queryData["close_account"], queryData["unblock_needed"], queryData["loyatly_needed"], queryData["phone_denied"], queryData["du_date_action"], queryData["due_date_zero"], queryData["due_date_move"], queryData["need_other"], queryData["note"])
+	tools.AddQueryToDB(data.CustomClaims["userid"], queryData["sr_number"], queryData["sr_type"], queryData["sr_result"], queryData["sr_repeat_result"], queryData["inform"], queryData["no_records"], queryData["no_records_only"], queryData["expenditure"], queryData["more_thing"], queryData["exp_claim"], queryData["fin_korr"], queryData["close_account"], queryData["unblock_needed"], queryData["loyatly_needed"], queryData["phone_denied"], queryData["du_date_action"], queryData["due_date_zero"], queryData["due_date_move"], queryData["need_other"], queryData["note"], queryData["note_sub_1"], queryData["note_sub_2"], queryData["claim_info"], queryData["comm_chat"], queryData["comm_call"], queryData["comm_mail"], queryData["comm_meet"], queryData["comm_nothing"], queryData["communications"])
 
 	res := &models.Resultation{
 		Result: "ok",
@@ -421,7 +442,7 @@ func GenerateNote(w http.ResponseWriter, r *http.Request) {
 			note += constants.FOOTER_TEXT
 		} else {
 			note += constants.FOOTER_TEXT
-			note += constants.RESULT_OF_CHECK
+			//note += constants.RESULT_OF_CHECK
 		}
 	} else if queryInfo["sr_result"] == "partial" && queryInfo["sr_type"] != "ko_several_multi" {
 		note += constants.FOOTER_TEXT
@@ -473,7 +494,7 @@ func GenerateNote(w http.ResponseWriter, r *http.Request) {
 	checkOver := tools.CheckIfUserInOver(userID)
 
 	if checkOver {
-		note += "\n \n ДЛЯ УКК: OVR16$"
+		//note += "\n \n ДЛЯ УКК: OVR16$"
 	}
 
 	result := &models.Info{

@@ -13,29 +13,21 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/getsentry/raven-go"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/go-sql-driver/mysql"
 	"log"
-	"math/rand"
-	"os"
 	"time"
 )
 
 func connectToDb() (*sql.DB, error) {
-	var db *sql.DB
-	var err error
-	if _, err := os.Stat("./goqualityBD.db"); err == nil {
-		db, err = sql.Open("sqlite3", "./goqualityBD.db")
+	conn, err := sql.Open("mysql", "quality_manager:1KTeMi7ZTKQ3LBSy@/quality_manager")
 
-	} else {
-
+	if err != nil {
 		raven.CaptureErrorAndWait(err, nil)
 		log.Print(err)
-
 	}
 
-	//defer db.Close()
+	return conn, err
 
-	return db, err
 }
 
 func CheckIfUserExist(SIEBEL, PASS string) bool {
@@ -51,19 +43,22 @@ func CheckIfUserExist(SIEBEL, PASS string) bool {
 			log.Println(err)
 		}
 
+		defer db.Close()
+
 		return false
 	}
 
+	defer db.Close()
 	return true
 }
 
-func UserQueries(userId string) ([]byte, error) {
+func UserQueries(userId, time_start, time_end string) ([]byte, error) {
 
 	db, err := connectToDb()
 
-	sqlString := `SELECT queries_list.siebel_login, queries_list.sr_number, queries_list.sr_type, queries_list.time_create, queries.sr_result,queries.overtime FROM (queries_list INNER JOIN queries ON queries_list.sr_number = queries.sr_number) WHERE queries_list.siebel_login = ? AND time_create between strftime('%d.%m.%Y %H:%M',date('now')) AND strftime('%d.%m.%Y %H:%M',datetime('now'), '+3 hours') ORDER BY time_create DESC`
+	sqlString := `SELECT queries_list.siebel_login, queries_list.sr_number, queries_list.sr_type, queries_list.time_create, queries.sr_result,queries.overtime FROM (queries_list INNER JOIN queries ON queries_list.sr_number = queries.sr_number) WHERE queries_list.siebel_login = ? AND time_create between ? AND ? ORDER BY time_create DESC`
 
-	rows, err := db.Query(sqlString, userId)
+	rows, err := db.Query(sqlString, userId, time_start, time_end)
 	if err != nil {
 
 		return nil, err
@@ -114,20 +109,368 @@ func UserQueries(userId string) ([]byte, error) {
 		return nil, err
 	}
 	//log.Println("user: " + userId + " response: " + string(jsonData))
+	defer db.Close()
 	return []byte(jsonData), nil
 }
 
-func AddQueryToDB(userId, sr_number, sr_type, sr_result, sr_repeat_result, inform, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, need_other, note string) {
+func GetTaskInfo(taskId string) ([]byte, error) {
+
+	db, err := connectToDb()
+
+	sqlString := `SELECT * FROM tasks WHERE id = ?`
+
+	rows, err := db.Query(sqlString, taskId)
+	if err != nil {
+
+		return nil, err
+	}
+	defer rows.Close()
+	columns, err := rows.Columns()
+	if err != nil {
+
+		return nil, err
+	}
+	count := len(columns)
+	tableData := make([]map[string]interface{}, 0)
+	values := make([]interface{}, count)
+	valuePtrs := make([]interface{}, count)
+	for rows.Next() {
+		for i := 0; i < count; i++ {
+			valuePtrs[i] = &values[i]
+		}
+		rows.Scan(valuePtrs...)
+		entry := make(map[string]interface{})
+		for i, col := range columns {
+			var v interface{}
+			val := values[i]
+			b, ok := val.([]byte)
+			if ok {
+				v = string(b)
+			} else {
+				v = val
+			}
+			entry[col] = v
+
+			if col == "overtime" {
+				switch v {
+				case "1":
+					entry[col] = "Да"
+					break
+				case "0":
+					entry[col] = "Нет"
+					break
+				}
+			}
+		}
+		tableData = append(tableData, entry)
+	}
+	jsonData, err := json.Marshal(tableData)
+	if err != nil {
+
+		return nil, err
+	}
+	//log.Println("user: " + userId + " response: " + string(jsonData))
+	defer db.Close()
+	return jsonData, nil
+}
+
+func UpdateTaskStatus(taskId, status, owner, assegnee string) bool {
+	db, err := connectToDb()
+
+	var sqlString string
+
+	if status != "Closed" && status != "Canceled" {
+		sqlString = `UPDATE tasks SET status = ?, assegnee = ? WHERE id = ? AND owner = ?`
+	} else {
+		sqlString = `UPDATE tasks SET status = ?, assegnee = ?, close_time = CURRENT_TIMESTAMP WHERE id = ? AND owner = ?`
+	}
+
+	_, err = db.Exec(sqlString, status, assegnee, taskId, owner)
+
+	if err != nil {
+		log.Print("Update task status error: ", err)
+		defer db.Close()
+		return false
+	} else {
+		defer db.Close()
+		return true
+	}
+}
+
+func PostNewTask(taskInfo map[string]string, owner string) bool {
+	db, err := connectToDb()
+
+	sqlString := `INSERT INTO tasks (type, owner, parent_sr, contact_id, account_id,phone_number,info, status) VALUES (?,?,?,?,?,?,?, 'Not assegnee')`
+
+	_, err = db.Exec(sqlString, taskInfo["type"], owner, taskInfo["parent_sr"], taskInfo["contact_id"], taskInfo["account_id"], taskInfo["phone_number"], taskInfo["info"])
+
+	if err != nil {
+		log.Print("Task insert error: ", err)
+		defer db.Close()
+		return false
+	} else {
+		defer db.Close()
+		return true
+	}
+}
+
+func GetTasksByUserOwner(user string) ([]byte, error) {
+
+	db, err := connectToDb()
+
+	sqlString := `SELECT * FROM tasks WHERE owner = ?`
+
+	rows, err := db.Query(sqlString, user)
+	if err != nil {
+
+		return nil, err
+	}
+	defer rows.Close()
+	columns, err := rows.Columns()
+	if err != nil {
+
+		return nil, err
+	}
+	count := len(columns)
+	tableData := make([]map[string]interface{}, 0)
+	values := make([]interface{}, count)
+	valuePtrs := make([]interface{}, count)
+	for rows.Next() {
+		for i := 0; i < count; i++ {
+			valuePtrs[i] = &values[i]
+		}
+		rows.Scan(valuePtrs...)
+		entry := make(map[string]interface{})
+		for i, col := range columns {
+			var v interface{}
+			val := values[i]
+			b, ok := val.([]byte)
+			if ok {
+				v = string(b)
+			} else {
+				v = val
+			}
+			entry[col] = v
+
+			if col == "overtime" {
+				switch v {
+				case "1":
+					entry[col] = "Да"
+					break
+				case "0":
+					entry[col] = "Нет"
+					break
+				}
+			}
+		}
+		tableData = append(tableData, entry)
+	}
+	jsonData, err := json.Marshal(tableData)
+	if err != nil {
+
+		return nil, err
+	}
+	//log.Println("user: " + userId + " response: " + string(jsonData))
+	defer db.Close()
+	return []byte(jsonData), nil
+}
+
+func GetTasksByAssegneeToUser(user string) ([]byte, error) {
+
+	db, err := connectToDb()
+
+	sqlString := `SELECT * FROM tasks WHERE assegnee = ?`
+
+	rows, err := db.Query(sqlString, user)
+	if err != nil {
+
+		return nil, err
+	}
+	defer rows.Close()
+	columns, err := rows.Columns()
+	if err != nil {
+
+		return nil, err
+	}
+	count := len(columns)
+	tableData := make([]map[string]interface{}, 0)
+	values := make([]interface{}, count)
+	valuePtrs := make([]interface{}, count)
+	for rows.Next() {
+		for i := 0; i < count; i++ {
+			valuePtrs[i] = &values[i]
+		}
+		rows.Scan(valuePtrs...)
+		entry := make(map[string]interface{})
+		for i, col := range columns {
+			var v interface{}
+			val := values[i]
+			b, ok := val.([]byte)
+			if ok {
+				v = string(b)
+			} else {
+				v = val
+			}
+			entry[col] = v
+
+			if col == "overtime" {
+				switch v {
+				case "1":
+					entry[col] = "Да"
+					break
+				case "0":
+					entry[col] = "Нет"
+					break
+				}
+			}
+		}
+		tableData = append(tableData, entry)
+	}
+	jsonData, err := json.Marshal(tableData)
+	if err != nil {
+
+		return nil, err
+	}
+	//log.Println("user: " + userId + " response: " + string(jsonData))
+	defer db.Close()
+	return []byte(jsonData), nil
+}
+
+func ListOfTasks() ([]byte, error) {
+
+	db, err := connectToDb()
+
+	sqlString := `SELECT * FROM tasks`
+
+	rows, err := db.Query(sqlString)
+	if err != nil {
+
+		return nil, err
+	}
+	defer rows.Close()
+	columns, err := rows.Columns()
+	if err != nil {
+
+		return nil, err
+	}
+	count := len(columns)
+	tableData := make([]map[string]interface{}, 0)
+	values := make([]interface{}, count)
+	valuePtrs := make([]interface{}, count)
+	for rows.Next() {
+		for i := 0; i < count; i++ {
+			valuePtrs[i] = &values[i]
+		}
+		rows.Scan(valuePtrs...)
+		entry := make(map[string]interface{})
+		for i, col := range columns {
+			var v interface{}
+			val := values[i]
+			b, ok := val.([]byte)
+			if ok {
+				v = string(b)
+			} else {
+				v = val
+			}
+			entry[col] = v
+
+			if col == "overtime" {
+				switch v {
+				case "1":
+					entry[col] = "Да"
+					break
+				case "0":
+					entry[col] = "Нет"
+					break
+				}
+			}
+		}
+		tableData = append(tableData, entry)
+	}
+	jsonData, err := json.Marshal(tableData)
+	if err != nil {
+
+		return nil, err
+	}
+	//log.Println("user: " + userId + " response: " + string(jsonData))
+	defer db.Close()
+	return []byte(jsonData), nil
+}
+
+func GetUserGroups(login string) string {
+	db, err := connectToDb()
+
+	sqlString := `SELECT user_group FROM users WHERE SIEBEL = ?`
+
+	row := db.QueryRow(sqlString, login)
+
+	var groups string
+
+	err = row.Scan(&groups)
+
+	if err != nil {
+		log.Print("User Func error: ", err)
+	}
+
+	defer db.Close()
+
+	return groups
+
+}
+
+func GetTaskOwner(taskID string) string {
+	db, err := connectToDb()
+
+	sqlString := `SELECT owner FROM tasks WHERE id = ?`
+
+	row := db.QueryRow(sqlString, taskID)
+
+	var owner string
+
+	err = row.Scan(&owner)
+
+	if err != nil {
+		log.Print("Get owner Func error: ", err)
+	}
+
+	defer db.Close()
+
+	return owner
+
+}
+
+func GetTaskStatus(taskID string) string {
+	db, err := connectToDb()
+
+	sqlString := `SELECT status FROM tasks WHERE id = ?`
+
+	row := db.QueryRow(sqlString, taskID)
+
+	var status string
+
+	err = row.Scan(&status)
+
+	if err != nil {
+		log.Print("Get status Func error: ", err)
+	}
+
+	defer db.Close()
+
+	return status
+
+}
+
+func AddQueryToDB(userId, sr_number, sr_type, sr_result, sr_repeat_result, inform, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, need_other, note, note_sub_1, note_sub_2, claim_info, comm_chat, comm_call, comm_mail, comm_meet, comm_nothing, communications string) {
 	db, err := connectToDb()
 
 	var sqlQuery string
 
 	if checkIfQueryExist(sr_number) {
-		sqlQuery = `UPDATE queries SET sr_type = ?, sr_result = ?, sr_repeat_result = ?, no_records = ?, no_records_only = ?, expenditure = ?, more_thing = ?, exp_claim = ?, fin_korr = ?, close_account = ?, unblock_needed = ?, loyatly_needed = ?, phone_denied = ?, due_date_action = ?, due_date_zero = ?, due_date_move = ?, inform = ?, need_other = ?, note = ?, additional_actions="", how_inform = "" WHERE sr_number = ?`
-		_, err = db.Exec(sqlQuery, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other, note, sr_number)
+		sqlQuery = `UPDATE queries SET sr_type = ?, sr_result = ?, sr_repeat_result = ?, no_records = ?, no_records_only = ?, expenditure = ?, more_thing = ?, exp_claim = ?, fin_korr = ?, close_account = ?, unblock_needed = ?, loyatly_needed = ?, phone_denied = ?, due_date_action = ?, due_date_zero = ?, due_date_move = ?, inform = ?, need_other = ?, note = ?, note_sub_1 = ?, note_sub_2 = ?, claim_info = ?, comm_chat = ?, comm_call = ?, comm_mail = ?, comm_meet = ?, comm_nothing = ?, communications = ?  WHERE sr_number = ?`
+		_, err = db.Exec(sqlQuery, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other, note, note_sub_1, note_sub_2, claim_info, comm_chat, comm_call, comm_mail, comm_meet, comm_nothing, communications, sr_number)
 	} else {
-		sqlQuery = `INSERT INTO queries (sr_number, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other, note, additional_actions, how_inform) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?, "", "")`
-		_, err = db.Exec(sqlQuery, sr_number, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other, note)
+		sqlQuery = `INSERT INTO queries (sr_number, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other, note, note_sub_1, note_sub_2, claim_info,comm_chat, comm_call,comm_mail, comm_meet, comm_nothing, communications) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+		_, err = db.Exec(sqlQuery, sr_number, sr_type, sr_result, sr_repeat_result, no_records, no_records_only, expenditure, more_thing, exp_claim, fin_korr, close_account, unblock_needed, loyatly_needed, phone_denied, due_date_action, due_date_zero, due_date_move, inform, need_other, note, note_sub_1, note_sub_2, claim_info, comm_chat, comm_call, comm_mail, comm_meet, comm_nothing, communications)
 
 		if CheckIfUserInOver(userId) {
 			sqlQuery = "UPDATE queries SET overtime = 1 WHERE sr_number = ?"
@@ -161,7 +504,7 @@ func AddQueryToDB(userId, sr_number, sr_type, sr_result, sr_repeat_result, infor
 		sqlQuery = `UPDATE queries_list SET sr_type = ? WHERE sr_number = ?`
 		_, err = db.Exec(sqlQuery, sr_type_rus, sr_number)
 	} else {
-		sqlQuery = `INSERT INTO queries_list (time_create, siebel_login, sr_number, sr_type) VALUES (strftime('%d.%m.%Y %H:%M',datetime('now'), '+3 hours'),?,?,?)`
+		sqlQuery = `INSERT INTO queries_list (time_create, siebel_login, sr_number, sr_type) VALUES (CURRENT_TIMESTAMP,?,?,?)`
 		_, err = db.Exec(sqlQuery, userId, sr_number, sr_type_rus)
 	}
 
@@ -169,6 +512,8 @@ func AddQueryToDB(userId, sr_number, sr_type, sr_result, sr_repeat_result, infor
 		log.Print(err)
 
 	}
+
+	defer db.Close()
 
 }
 
@@ -186,8 +531,12 @@ func checkIfQueryExist(sr_number string) bool {
 
 		}
 
+		defer db.Close()
+
 		return false
 	}
+
+	defer db.Close()
 
 	return true
 }
@@ -206,8 +555,35 @@ func CheckIfUserInOver(user string) bool {
 
 		}
 
+		defer db.Close()
+
 		return false
 	}
+
+	defer db.Close()
+
+	return true
+}
+
+func CheckAdminMode(user string) bool {
+	db, err := connectToDb()
+
+	sqlstmt := `SELECT admin FROM users WHERE siebel = ? AND admin = "1"`
+
+	err = db.QueryRow(sqlstmt, user).Scan(&user)
+
+	if err != nil {
+		if err != sql.ErrNoRows {
+			log.Println(err)
+
+		}
+
+		defer db.Close()
+
+		return false
+	}
+
+	defer db.Close()
 
 	return true
 }
@@ -229,6 +605,8 @@ func IneedMoreMoney(user, action string) {
 
 		log.Print(err)
 	}
+
+	defer db.Close()
 }
 
 func GetQueryInfo(sr_number string) ([]byte, error) {
@@ -276,15 +654,12 @@ func GetQueryInfo(sr_number string) ([]byte, error) {
 		return nil, err
 	}
 	//log.Println("sr_number: " + sr_number + " response: " + string(jsonData))
+	defer db.Close()
 	return []byte(jsonData), nil
 }
 
-func AddNewUser(firstName, lastName, middleName, login string) (string, bool) {
+func AddNewUser(firstName, lastName, middleName, login, password, groups, isAdmin, winlogin string) bool {
 	db, err := connectToDb()
-
-	var pass string
-
-	pass = randStringRunes(8)
 
 	if err != nil {
 
@@ -292,24 +667,36 @@ func AddNewUser(firstName, lastName, middleName, login string) (string, bool) {
 	}
 
 	if CheckIfExistRegister(login) {
-		return "", false
+		defer db.Close()
+		return false
 	} else {
-		sqlQuery := `INSERT INTO users (SIEBEL, PASS, firstName, lastName, middleName) VALUES (?,?,?,?,?)`
+		sqlQuery := `INSERT INTO users (SIEBEL, PASS, firstName, lastName, middleName, user_group, admin, winlogin) VALUES (?,?,?,?,?,?,?,?)`
 
-		_, err = db.Exec(sqlQuery, login, pass, firstName, lastName, middleName)
-
-		return pass, true
+		_, err = db.Exec(sqlQuery, login, password, firstName, lastName, middleName, groups, isAdmin, winlogin)
+		defer db.Close()
+		return true
 	}
 }
 
-var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
+func UpdateUserInfo(groups, isAdmin, login string) bool {
+	db, err := connectToDb()
 
-func randStringRunes(n int) string {
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	if err != nil {
+
+		log.Print(err)
 	}
-	return string(b)
+
+	if CheckIfExistRegister(login) {
+		sqlQuery := `UPDATE users SET admin = ?, user_group = ? WHERE SIEBEL = ?`
+
+		_, err = db.Exec(sqlQuery, isAdmin, groups, login)
+		defer db.Close()
+		return true
+
+	} else {
+		defer db.Close()
+		return false
+	}
 }
 
 func CheckIfExistRegister(SIEBEL string) bool {
@@ -325,10 +712,10 @@ func CheckIfExistRegister(SIEBEL string) bool {
 			log.Println(err)
 
 		}
-
+		defer db.Close()
 		return false
 	}
-
+	defer db.Close()
 	return true
 }
 
@@ -345,10 +732,10 @@ func validUser(SIEBEL, PASS string) bool {
 			log.Println(err)
 
 		}
-
+		defer db.Close()
 		return false
 	}
-
+	defer db.Close()
 	return true
 }
 
@@ -362,9 +749,11 @@ func DeleteQuery(sr_number, user string) bool {
 	if err != nil {
 		log.Println(err)
 
+		defer db.Close()
 		return false
 	}
 
+	defer db.Close()
 	return true
 
 }
@@ -383,6 +772,7 @@ func SaveLog(inter, logText, userName string) {
 
 		log.Print(err)
 	}
+	defer db.Close()
 
 }
 
@@ -398,6 +788,8 @@ func ChangeUserPassword(user, passwordold, newpassword string) error {
 		err = errors.New("User not valid")
 	}
 
+	defer db.Close()
+
 	return err
 
 }
@@ -410,6 +802,7 @@ func ChangeUserLogin(oldLogin, newLogin string) error {
 
 	_, err = db.Exec(querySql, newLogin, oldLogin)
 
+	defer db.Close()
 	return err
 
 }

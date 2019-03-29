@@ -30,6 +30,8 @@ type Query struct {
 }
 
 type User struct {
-	Login string
-	Over  bool
+	Login   string
+	Over    bool
+	Groups  []string
+	IsAdmin bool
 }

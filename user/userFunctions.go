@@ -11,13 +11,13 @@ package user
 import (
 	"encoding/json"
 	"errors"
-	"flag"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"qualityManagerApi/auth"
 	"qualityManagerApi/models"
 	"qualityManagerApi/tools"
+	"strings"
 )
 
 /**
@@ -82,24 +82,6 @@ func GetUserLogin(w http.ResponseWriter, r *http.Request) string {
 	return userID
 }
 
-func makeNewUser(firstName, lastName, middleName string) {
-
-	flag.Parse()
-
-	var login string
-
-	login = string(firstName[0]) + string(middleName[0]) + lastName
-
-	pass, result := tools.AddNewUser(firstName, lastName, middleName, login)
-
-	if result {
-		log.Println("User Login: " + login + "\n Password: " + pass)
-	} else {
-		log.Println("User is exist")
-	}
-
-}
-
 /**
 @api {get} /api/user/info Getting info about user
 @apiName GetUserInfo
@@ -129,9 +111,15 @@ func makeNewUser(firstName, lastName, middleName string) {
 func GetInfoAboutUser(w http.ResponseWriter, r *http.Request) {
 	data := GetUserLogin(w, r)
 
+	groups := tools.GetUserGroups(data)
+
+	resultOfGroups := strings.Split(groups, ",")
+
 	res := &models.User{
-		Login: data,
-		Over:  tools.CheckIfUserInOver(data),
+		Login:   data,
+		Over:    tools.CheckIfUserInOver(data),
+		IsAdmin: tools.CheckAdminMode(data),
+		Groups:  resultOfGroups,
 	}
 
 	showReq, _ := json.Marshal(res)
