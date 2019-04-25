@@ -197,6 +197,25 @@ func UpdateTaskStatus(taskId, status, owner, assegnee string) bool {
 	}
 }
 
+func UpdateTaskInfo(taskId string, taskInfo map[string]string) bool {
+	db, err := connectToDb()
+
+	var sqlString string
+
+	sqlString = "UPDATE tasks SET type = ?, assegnee = ?, parent_sr = ?, contact_id = ?, account_id = ?, phone_number = ?, info = ? WHERE id = ?"
+
+	_, err = db.Exec(sqlString, taskInfo["type"], taskInfo["assegnee"], taskInfo["parent_sr"], taskInfo["contact_id"], taskInfo["account_id"], taskInfo["phone_number"], taskInfo["info"], taskId)
+
+	if err != nil {
+		log.Print("Update task info error: ", err)
+		defer db.Close()
+		return false
+	} else {
+		defer db.Close()
+		return true
+	}
+}
+
 func PostNewTask(taskInfo map[string]string, owner string) bool {
 	db, err := connectToDb()
 

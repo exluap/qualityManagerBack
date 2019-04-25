@@ -156,6 +156,44 @@ func PostNewTaskStatus(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func UpdateTaskInfo(w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadAll(r.Body)
+
+	var taskInfo map[string]string
+
+	json.Unmarshal(body, &taskInfo)
+
+	_ = auth.CheckToken(w, r)
+
+	vars := mux.Vars(r)
+
+	taskId := vars["taskId"]
+
+	if tools.UpdateTaskInfo(taskId, taskInfo) {
+		res := &models.Resultation{
+			Result: "Info changed ",
+		}
+
+		result, _ := json.Marshal(res)
+
+		w.Write(result)
+	} else {
+		res := &models.Resultation{
+			Result: "Info not changed",
+		}
+
+		result, _ := json.Marshal(res)
+
+		w.Write(result)
+	}
+
+	if err != nil {
+		log.Print("Cant update task info")
+		raven.CaptureErrorAndWait(err, nil)
+		http.Error(w, "Some problems with query", http.StatusBadRequest)
+	}
+}
+
 func prepareToUpdate(taskId, status, userId string) bool {
 	var result bool
 

@@ -45,8 +45,8 @@ func startWebServer() {
 	r.HandleFunc("/", hello)
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"*"},                      // All origins
-		AllowedMethods:   []string{"GET", "POST", "OPTIONS"}, // Allowing only get, just an example
+		AllowedOrigins:   []string{"*"},                  // All origins
+		AllowedMethods:   []string{"GET", "POST", "PUT"}, // Allowing only get, just an example
 		AllowCredentials: true,
 		AllowedHeaders:   []string{"*"},
 	})
@@ -85,6 +85,7 @@ func startWebServer() {
 	tasksGroup.HandleFunc("/createNewTask", tasks.PostNewTask).Methods("POST")
 	tasksGroup.HandleFunc("/{taskId}/info", tasks.GetTaskInfo).Methods("GET")
 	tasksGroup.HandleFunc("/{taskId}/statusUpdate", tasks.PostNewTaskStatus).Methods("POST")
+	tasksGroup.HandleFunc("/{taskId}/update", tasks.UpdateTaskInfo).Methods("POST")
 
 	//r.HandleFunc("/add_log", tools.AddingLog)
 
