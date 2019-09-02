@@ -20,10 +20,11 @@ import (
 	"qualityManagerApi/constants"
 	"qualityManagerApi/queries"
 	"qualityManagerApi/tasks"
+	"qualityManagerApi/tools"
 	"qualityManagerApi/user"
 )
 
-const version = "5.0.0"
+const version = "5.0.3"
 
 func init() {
 	err := raven.SetDSN("https://b65f1572d92948cfbd2c5a2bb3e4adc2:1ca4a46c2c7f408fbaf655de030a0e4f@log.exluap.com/2")
@@ -87,6 +88,9 @@ func startWebServer() {
 	tasksGroup.HandleFunc("/{taskId}/statusUpdate", tasks.PostNewTaskStatus).Methods("POST")
 	tasksGroup.HandleFunc("/{taskId}/update", tasks.UpdateTaskInfo).Methods("POST")
 
+	//File Utils
+	r.HandleFunc("/api/upload", tools.GetFile).Methods("POST")
+
 	//r.HandleFunc("/add_log", tools.AddingLog)
 
 	log.Println("Current version:", version)
@@ -96,5 +100,9 @@ func startWebServer() {
 }
 
 func hello(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, please auth")
+	_, err := fmt.Fprintf(w, "The request is not correct.  Please read the documentation")
+
+	if err != nil {
+		log.Printf("Error with handle /: %s", err)
+	}
 }
