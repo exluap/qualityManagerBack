@@ -24,7 +24,7 @@ import (
 	"qualityManagerApi/user"
 )
 
-const version = "5.0.3"
+const version = "5.1.0"
 
 func init() {
 	err := raven.SetDSN("https://b65f1572d92948cfbd2c5a2bb3e4adc2:1ca4a46c2c7f408fbaf655de030a0e4f@log.exluap.com/2")
@@ -91,11 +91,16 @@ func startWebServer() {
 	//File Utils
 	r.HandleFunc("/api/upload", tools.GetFile).Methods("POST")
 
+	//Report Generator
+	r.HandleFunc("/api/report", tools.GenerateReport).Methods("POST")
+
 	//r.HandleFunc("/add_log", tools.AddingLog)
 
+	conf := constants.GetConfig()
+
 	log.Println("Current version:", version)
-	log.Println("Listening for connections on port: ", constants.PORT)
-	log.Fatal(http.ListenAndServe(":"+constants.PORT, c.Handler(r)))
+	log.Println("Listening for connections on port: ", conf.Port)
+	log.Fatal(http.ListenAndServe(":"+conf.Port, c.Handler(r)))
 
 }
 

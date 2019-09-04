@@ -14,6 +14,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"qualityManagerApi/constants"
 )
 
 func GetFile(w http.ResponseWriter, r *http.Request) {
@@ -29,8 +30,10 @@ func GetFile(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
+	conf := constants.GetConfig()
+
 	fmt.Fprintf(w, "%v", handler.Header)
-	f, err := os.OpenFile("uploaded/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+	f, err := os.OpenFile(conf.UploadFilePath+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 
 	if err != nil {
 		log.Printf("Error create file: %s", err)

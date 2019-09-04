@@ -1,0 +1,6 @@
+{
+  "UploadFilePath": "uploaded/",
+  "ReportSaveFileSave": "reports/",
+  "Port": "1337",
+  "ReportFileName": "QM_tasks.csv"
+}

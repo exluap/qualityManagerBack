@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4bcc6da8-9899-45c9-b4fa-84a83872243a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/UploadFileHelper.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tools/ReportGenerator.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apidoc.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/constants/settings.go" beforeDir="false" afterPath="$PROJECT_DIR$/constants/settings.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tools/UploadFileHelper.go" beforeDir="false" afterPath="$PROJECT_DIR$/tools/UploadFileHelper.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -148,7 +152,7 @@
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="fileTemplates" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
@@ -170,21 +174,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Go Build.Build">
-    <configuration name="Build" type="GoApplicationRunConfiguration" factoryName="Go Application">
-      <module name="qualityManagerApi" />
-      <working_directory value="$PROJECT_DIR$/" />
-      <go_parameters value="-i" />
-      <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/main.go" />
-      <package value="qualityManagerApi" />
-      <directory value="$PROJECT_DIR$/" />
-      <option name="run" value="false" />
-      <method v="2">
-        <option name="GoBeforeRunTask" />
-      </method>
-    </configuration>
-    <configuration name="Unnamed" type="GoApplicationRunConfiguration" factoryName="Go Application">
+  <component name="RunManager">
+    <configuration name="go build main.go" type="GoApplicationRunConfiguration" factoryName="Go Application" nameIsGenerated="true">
       <module name="qualityManagerApi" />
       <working_directory value="$PROJECT_DIR$/" />
       <go_parameters value="-i" />
@@ -194,10 +185,6 @@
       <directory value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
-    <list>
-      <item itemvalue="Go Build.Unnamed" />
-      <item itemvalue="Go Build.Build" />
-    </list>
   </component>
   <component name="ServiceViewManager">
     <option name="allServicesViewState">
@@ -207,11 +194,6 @@
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
               <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@7e0077d2" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-            </path>
-            <path>
-              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceGroupNode@7e0077d2" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@a9d71ba" type="9fbbdea:ServiceModel$ServiceNode" />
             </path>
           </expand>
           <select />
@@ -231,8 +213,19 @@
       <updated>1567088585747</updated>
       <workItem from="1567088587428" duration="19000" />
       <workItem from="1567088618343" duration="2371000" />
-      <workItem from="1567413417468" duration="719000" />
+      <workItem from="1567413417468" duration="949000" />
+      <workItem from="1567586126230" duration="3996000" />
+      <workItem from="1567598142572" duration="1269000" />
+      <workItem from="1567604057582" duration="1898000" />
     </task>
+    <task id="LOCAL-00001" summary="Added File Upload helper tool">
+      <created>1567431797384</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1567431797384</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -253,7 +246,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="Added .drone.yml" />
     <MESSAGE value="Added build puppiline" />
     <MESSAGE value="Updated build" />
     <MESSAGE value="Testing deploy" />
@@ -278,7 +270,8 @@
     <MESSAGE value="Updated task status" />
     <MESSAGE value="Test commit for slack" />
     <MESSAGE value="Update tasks function" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update tasks function" />
+    <MESSAGE value="Added File Upload helper tool" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added File Upload helper tool" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="masterDetails">
