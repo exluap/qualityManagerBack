@@ -64,7 +64,6 @@ func startWebServer() {
 	queryGroup.HandleFunc("/list", raven.RecoveryHandler(queries.GetQueries)).Methods("POST")
 	queryGroup.HandleFunc("/add", raven.RecoveryHandler(queries.AddQuery)).Methods("POST")
 	queryGroup.HandleFunc("/delete", raven.RecoveryHandler(queries.DeleteSR)).Methods("POST")
-	queryGroup.HandleFunc("/helper", raven.RecoveryHandler(queries.GenerateNote)).Methods("POST")
 
 	//Auth Group
 	authGroup := r.PathPrefix("/api/auth").Subrouter()

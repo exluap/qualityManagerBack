@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4bcc6da8-9899-45c9-b4fa-84a83872243a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tools/ReportGenerator.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apidoc.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/constants/settings.go" beforeDir="false" afterPath="$PROJECT_DIR$/constants/settings.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/UploadFileHelper.go" beforeDir="false" afterPath="$PROJECT_DIR$/tools/UploadFileHelper.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/queries/queriesFunctions.go" beforeDir="false" afterPath="$PROJECT_DIR$/queries/queriesFunctions.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -124,11 +119,6 @@
       </map>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
-    <option name="width" value="1440" />
-    <option name="height" value="805" />
-  </component>
   <component name="ProjectId" id="1Q6QV3trbmz61hRRL17cs6PGcip" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
@@ -216,7 +206,7 @@
       <workItem from="1567413417468" duration="949000" />
       <workItem from="1567586126230" duration="3996000" />
       <workItem from="1567598142572" duration="1269000" />
-      <workItem from="1567604057582" duration="1898000" />
+      <workItem from="1567604057582" duration="2783000" />
     </task>
     <task id="LOCAL-00001" summary="Added File Upload helper tool">
       <created>1567431797384</created>
@@ -225,7 +215,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567431797384</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary=" Added config file&#10; Changed tools for work with config&#10; Added Report Helper">
+      <created>1567610324861</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1567610324861</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -246,7 +243,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
-    <MESSAGE value="Added build puppiline" />
+    <option name="CHECK_CODE_CLEANUP_BEFORE_PROJECT_COMMIT" value="true" />
     <MESSAGE value="Updated build" />
     <MESSAGE value="Testing deploy" />
     <MESSAGE value="added tag" />
@@ -271,7 +268,8 @@
     <MESSAGE value="Test commit for slack" />
     <MESSAGE value="Update tasks function" />
     <MESSAGE value="Added File Upload helper tool" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added File Upload helper tool" />
+    <MESSAGE value=" Added config file&#10; Changed tools for work with config&#10; Added Report Helper" />
+    <option name="LAST_COMMIT_MESSAGE" value=" Added config file&#10; Changed tools for work with config&#10; Added Report Helper" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="masterDetails">
