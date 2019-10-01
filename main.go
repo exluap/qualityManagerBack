@@ -93,7 +93,7 @@ func startWebServer() {
 	//Report Generator
 	r.HandleFunc("/api/report", tools.GenerateReport).Methods("POST")
 
-	//r.HandleFunc("/add_log", tools.AddingLog)
+	r.HandleFunc("/api/log", user.Logging).Methods("POST")
 
 	conf := constants.GetConfig()
 

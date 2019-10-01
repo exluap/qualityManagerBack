@@ -777,7 +777,7 @@ func DeleteQuery(sr_number, user string) bool {
 
 }
 
-func SaveLog(inter, logText, userName string) {
+func SaveLog(inter, logText, userName string) error {
 
 	db, err := connectToDb()
 
@@ -792,6 +792,8 @@ func SaveLog(inter, logText, userName string) {
 		log.Print(err)
 	}
 	defer db.Close()
+
+	return err
 
 }
 

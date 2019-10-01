@@ -183,3 +183,30 @@ func ChangeLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
+func Logging(w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		log.Println("error with save log: ", err)
+	}
+
+	var b map[string]string
+
+	err = json.Unmarshal(body, &b)
+
+	if err != nil {
+		log.Println("error with parse body: ", err)
+	}
+
+	err = tools.SaveLog("front", b["text"], b["user"])
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		log.Println("error with save log: ", err)
+		_, err = w.Write([]byte("can not save log"))
+	} else {
+		w.WriteHeader(http.StatusOK)
+		_, err = w.Write([]byte("ok"))
+	}
+}
