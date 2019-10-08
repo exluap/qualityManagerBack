@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4bcc6da8-9899-45c9-b4fa-84a83872243a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/structs/StructInfo.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tools/DBUtil.go" beforeDir="false" afterPath="$PROJECT_DIR$/tools/DBUtil.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/userFunctions.go" beforeDir="false" afterPath="$PROJECT_DIR$/user/userFunctions.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -65,51 +63,6 @@
         <option value="Go File" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>из-за отс</find>
-      <find>все проверили и выяснили, что в &lt;</find>
-      <find>сначала в чем</find>
-      <find>проверили и выяснили, что &lt;</find>
-      <find>необоснованной/</find>
-      <find>&lt;описание</find>
-      <find>&lt;пис</find>
-      <find>напиши описание</find>
-      <find>закрытие</find>
-      <find>обы</find>
-      <find>передан з</find>
-      <find>ALL_AS</find>
-      <find>мы сделаем</find>
-      <find>over</find>
-      <find>полно</find>
-      <find>проверили Ваше</find>
-      <find>JWTData</find>
-      <find>tools.</find>
-      <find>Request</find>
-      <find>json.Un</find>
-      <find>http.StatusInternalServerErro</find>
-      <find>raven.CaptureErrorAndWait(err, nil)</find>
-      <find>все проверили и выяснили в</find>
-      <find>tools.save</find>
-      <find>result_of</find>
-      <find>time</find>
-      <find>CURRENT_TIMESTAMP</find>
-      <find>userg</find>
-      <find>log.</find>
-      <find>getuser</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>&lt;напиши описание</replace>
-      <replace>НАПИШИ ОПИСАНИЕ</replace>
-      <replace>models.JWTData</replace>
-      <replace>constants.</replace>
-      <replace>http.StatusUnauthorized</replace>
-      <replace />
-    </replaceStrings>
-    <dirStrings>
-      <dir>$PROJECT_DIR$/tools</dir>
-    </dirStrings>
   </component>
   <component name="GOROOT" path="/usr/local/go" />
   <component name="Git.Settings">
@@ -213,7 +166,9 @@
       <workItem from="1568026496988" duration="905000" />
       <workItem from="1568200138201" duration="592000" />
       <workItem from="1569565308464" duration="31000" />
-      <workItem from="1569924812773" duration="565000" />
+      <workItem from="1569924812773" duration="751000" />
+      <workItem from="1569937529227" duration="48000" />
+      <workItem from="1570547895557" duration="579000" />
     </task>
     <task id="LOCAL-00001" summary="Added File Upload helper tool">
       <created>1567431797384</created>
@@ -236,7 +191,14 @@
       <option name="project" value="LOCAL" />
       <updated>1567677999851</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added logging func">
+      <created>1569925402791</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1569925402792</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -261,7 +223,6 @@
     <ignored-roots>
       <path value="$PROJECT_DIR$/apiDoc" />
     </ignored-roots>
-    <MESSAGE value="Testing deploy" />
     <MESSAGE value="added tag" />
     <MESSAGE value="testing" />
     <MESSAGE value="Chaged response for queries list" />
@@ -286,7 +247,8 @@
     <MESSAGE value="Added File Upload helper tool" />
     <MESSAGE value=" Added config file&#10; Changed tools for work with config&#10; Added Report Helper" />
     <MESSAGE value="Deleted queries helper" />
-    <option name="LAST_COMMIT_MESSAGE" value="Deleted queries helper" />
+    <MESSAGE value="Added logging func" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added logging func" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="masterDetails">
